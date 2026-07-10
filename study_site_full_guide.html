@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>나만의 공부 사이트 만들기 · 과목별 가이드</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-dark:#12182B; --navy:#1E2A4A; --light:#F4F6F8; --gray:#5C6470; --line:#E3E7EC; --white:#fff;
+    --accent:#00A896; --accent-light:#6FE5D2;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{ margin:0; font-family:'Noto Sans KR',sans-serif; color:var(--navy-dark); line-height:1.7; background:var(--white); }
+  h1,h2,h3{ font-family:'Gaegu','Noto Sans KR',sans-serif; }
+  .mono{ font-family:'JetBrains Mono', monospace; }
+  .hidden{ display:none !important; }
+
+  /* ===== SELECT SCREEN ===== */
+  .select-hero{
+    background:radial-gradient(ellipse 700px 400px at 85% -10%, rgba(0,168,150,.35), transparent 60%), var(--navy-dark);
+    color:#fff; padding:70px 24px 50px; text-align:center;
+  }
+  .select-hero h1{ font-size:36px; margin:14px 0 12px; }
+  .select-hero p{ font-size:16px; color:#C7CEDA; max-width:580px; margin:0 auto; }
+  .eyebrow{ font-size:13px; font-weight:700; letter-spacing:3px; color:var(--accent-light); text-transform:uppercase; }
+
+  .select-wrap{ max-width:920px; margin:-24px auto 80px; padding:0 24px; }
+  .name-card{
+    background:#fff; border:1.5px solid var(--line); border-radius:20px; padding:24px 28px;
+    box-shadow:0 20px 50px -30px rgba(0,0,0,.3); margin-bottom:22px;
+  }
+  .name-card label{ font-weight:700; font-size:15px; display:block; margin-bottom:10px; }
+  .name-card input{
+    width:100%; border:1.5px solid var(--line); border-radius:12px; padding:13px 16px; font-size:16px;
+    font-family:'Noto Sans KR',sans-serif;
+  }
+
+  .pick-section{ margin-bottom:26px; }
+  .pick-label{ font-weight:700; font-size:15px; margin-bottom:12px; color:var(--navy-dark); }
+
+  .subject-grid{ display:grid; grid-template-columns:repeat(5,1fr); gap:12px; }
+  @media (max-width:900px){ .subject-grid{ grid-template-columns:repeat(3,1fr); } }
+  @media (max-width:600px){ .subject-grid{ grid-template-columns:repeat(2,1fr); } }
+  .type-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+  @media (max-width:760px){ .type-grid{ grid-template-columns:repeat(2,1fr); } }
+
+  .pick-card{
+    position:relative; background:#fff; border:2px solid var(--line); border-radius:16px; padding:18px 12px; text-align:center;
+    cursor:pointer; transition:transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+  }
+  .pick-card:hover{ transform:translateY(-3px); box-shadow:0 12px 24px -14px rgba(0,0,0,.25); }
+  .pick-card .ic{ font-size:30px; display:block; margin-bottom:8px; transition:transform .18s ease; }
+  .pick-card:hover .ic{ transform:scale(1.12); }
+  .pick-card .nm{ font-weight:700; font-size:14px; margin-bottom:3px; }
+  .pick-card .ds{ font-size:11px; color:var(--gray); }
+  .pick-card.picked{ border-color:var(--pick-color, #00A896); background:var(--pick-bg,#F0FBF9); transform:translateY(-2px); box-shadow:0 14px 26px -16px rgba(0,0,0,.3); }
+  .pick-card .badge{
+    position:absolute; top:-8px; right:-8px; width:24px; height:24px; border-radius:50%;
+    background:var(--pick-color,#00A896); color:#fff; display:none; align-items:center; justify-content:center;
+    font-size:13px; font-weight:700; box-shadow:0 4px 10px rgba(0,0,0,.2); transform:scale(0); transition:transform .2s ease;
+  }
+  .pick-card.picked .badge{ display:flex; transform:scale(1); }
+
+  /* ---- reveal on scroll ---- */
+  .reveal{ opacity:0; transform:translateY(20px); transition:opacity .6s ease, transform .6s ease; }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+
+  .start-row{ text-align:center; margin-top:26px; }
+  .start-btn{
+    background:var(--navy-dark); color:#fff; border:none; border-radius:999px; padding:16px 34px;
+    font-size:16px; font-weight:700; cursor:pointer; font-family:'Noto Sans KR',sans-serif;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .start-btn:not(:disabled):hover{ transform:translateY(-2px); box-shadow:0 14px 28px -14px rgba(18,24,43,.5); }
+  .start-btn:disabled{ opacity:.35; cursor:not-allowed; }
+  .start-hint{ font-size:13px; color:var(--gray); margin-top:10px; }
+
+  /* ===== GUIDE SCREEN (themed) ===== */
+  .guide-nav{
+    position:sticky; top:0; z-index:60; background:rgba(18,24,43,0.97); backdrop-filter:blur(8px);
+    display:flex; align-items:center; justify-content:space-between; padding:10px 22px;
+  }
+  .guide-nav .gn-brand{ color:#fff; font-weight:700; font-size:13.5px; display:flex; align-items:center; gap:8px; }
+  .guide-nav .gn-progress{ color:var(--accent-light); font-size:12.5px; font-weight:600; }
+  .guide-nav .gn-fill{ height:3px; background:linear-gradient(90deg,var(--accent),var(--accent-light)); width:0%; transition:width .2s ease; position:absolute; bottom:0; left:0; }
+  .guide-dots{ display:flex; gap:5px; }
+  .guide-dot{
+    width:26px; height:26px; border-radius:50%; background:#2A3555; color:#7C859C; font-size:11px; font-weight:700;
+    display:flex; align-items:center; justify-content:center; text-decoration:none; transition:.2s; position:relative;
+  }
+  .guide-dot.active{ background:var(--accent); color:var(--navy-dark); }
+  .guide-dot.done:not(.active):after{
+    content:"✓"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    background:var(--accent-light); color:var(--navy-dark); border-radius:50%; font-size:11px;
+  }
+  @media (max-width:600px){ .guide-nav .gn-brand span.txt{ display:none; } }
+
+  .guide-banner{
+    background:linear-gradient(135deg, var(--accent), var(--accent-light));
+    color:var(--navy-dark); padding:38px 24px; text-align:center;
+  }
+  .guide-banner .gicon{ font-size:40px; }
+  .guide-banner h2{ font-size:27px; margin:8px 0 4px; }
+  .guide-banner .gsub{ font-size:14.5px; font-weight:600; opacity:.85; }
+  .back-link{ display:inline-block; margin-top:14px; font-size:13px; color:var(--navy-dark); text-decoration:underline; cursor:pointer; }
+
+  .prep-box{ max-width:820px; margin:28px auto 0; background:var(--light); border-radius:16px; padding:20px 24px; }
+  .prep-box h3{ margin:0 0 10px; font-size:16px; color:var(--accent); }
+  .prep-box ul{ margin:0; padding-left:20px; font-size:14.5px; color:var(--navy); }
+  .prep-box li{ margin-bottom:6px; }
+
+  section.step{ padding:52px 24px 0; max-width:820px; margin:0 auto; }
+  .step-head{ display:flex; align-items:center; gap:16px; margin-bottom:8px; }
+  .step-num{
+    width:44px; height:44px; border-radius:50%; background:var(--accent); color:var(--navy-dark);
+    display:flex; align-items:center; justify-content:center; font-weight:700; font-size:19px; flex:none;
+  }
+  .step-head h2{ font-size:24px; margin:0; }
+  .why{ background:var(--light); border-radius:14px; padding:16px 20px; margin:18px 0; font-size:14.5px; color:var(--navy); }
+  .why b{ color:var(--accent); }
+
+  .prompt-box{
+    background:var(--navy-dark); color:#fff; border-radius:16px; padding:20px 22px; margin:16px 0;
+    position:relative; font-size:15px; white-space:pre-wrap;
+  }
+  .prompt-box .label{ font-size:12px; color:var(--accent-light); font-weight:700; letter-spacing:1px; margin-bottom:10px; display:block; }
+  .copy-btn{
+    position:absolute; top:16px; right:16px; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.3);
+    color:#fff; border-radius:999px; padding:6px 14px; font-size:12.5px; cursor:pointer; font-family:'Noto Sans KR',sans-serif;
+  }
+  .copy-btn.copied{ background:var(--accent); color:var(--navy-dark); border-color:var(--accent); font-weight:700; }
+
+  .check-box{ border:1.5px solid var(--line); border-radius:14px; padding:16px 20px; margin:16px 0; }
+  .check-box .clabel{ font-size:13px; font-weight:700; color:var(--gray); margin-bottom:10px; display:block; }
+  .check-item{ display:flex; align-items:flex-start; gap:10px; font-size:14.5px; margin-bottom:8px; color:var(--navy); }
+  .check-item input{ margin-top:4px; }
+
+  .preview-box{ margin:18px 0; }
+  .mini-card{
+    background:#fff; border:1.5px solid var(--line); border-radius:14px; padding:16px;
+    border-top:5px solid var(--accent); margin-bottom:10px;
+  }
+  .mini-card .front{ font-weight:700; font-size:14px; margin-bottom:6px; }
+  .mini-card .back{ font-size:12.5px; color:var(--gray); }
+  .mini-quiz .q{ font-weight:700; font-size:14.5px; margin-bottom:10px; }
+  .mini-quiz .choice{ display:inline-block; border:1.5px solid var(--line); border-radius:10px; padding:7px 12px; margin:0 6px 6px 0; font-size:13px; }
+  .mini-quiz .choice.correct{ border-color:var(--accent); background:var(--light); font-weight:700; }
+  .mini-note .row{ font-size:13.5px; margin-bottom:6px; }
+  .mini-note .row b{ color:var(--accent); }
+  .mini-todo{ display:flex; align-items:center; gap:10px; font-size:14px; padding:8px 0; border-bottom:1px solid var(--line); }
+
+  .open-ai-row{ text-align:center; margin:30px 0 10px; }
+  .open-ai-btn{
+    display:inline-block; background:var(--accent); color:var(--navy-dark); font-weight:700;
+    padding:14px 26px; border-radius:999px; text-decoration:none; font-size:14.5px; margin:0 6px;
+  }
+  .open-ai-btn.secondary{ background:transparent; border:2px solid var(--accent); color:var(--navy-dark); }
+
+  .pitfall{ max-width:820px; margin:24px auto; background:#FFF4EC; border:1.5px solid #FFD8B8; border-radius:16px; padding:20px 22px; }
+  .pitfall b{ color:#FF6F59; }
+
+  .divider{ height:1px; background:var(--line); margin:56px 0 0; max-width:820px; margin-left:auto; margin-right:auto; }
+
+  /* deploy section (subject-agnostic, dark) */
+  .deploy-section{ background:var(--navy-dark); color:#fff; padding:60px 24px; margin-top:20px; }
+  .deploy-wrap{ max-width:820px; margin:0 auto; }
+  .deploy-wrap .eyebrow2{ font-size:13px; font-weight:700; letter-spacing:3px; color:var(--accent-light); text-transform:uppercase; }
+  .deploy-wrap h2{ font-size:28px; margin:10px 0 16px; }
+  .deploy-step{ display:flex; gap:16px; margin-bottom:24px; align-items:flex-start; }
+  .deploy-num{
+    width:40px; height:40px; border-radius:50%; background:rgba(255,255,255,.12); flex:none;
+    display:flex; align-items:center; justify-content:center; font-weight:700; font-size:18px;
+  }
+  .deploy-step .dtxt b{ display:block; margin-bottom:4px; font-size:15.5px; }
+  .deploy-step .dtxt span{ font-size:14px; color:#C7CEDA; }
+
+  .final{ background:var(--navy); color:#fff; border-radius:24px; padding:34px; margin:56px auto; max-width:820px; }
+  .final h3{ margin-top:0; font-size:22px; }
+  .idea-chip{
+    display:inline-block; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.25);
+    border-radius:999px; padding:8px 16px; font-size:13.5px; margin:4px 6px 0 0;
+  }
+  footer{ text-align:center; padding:40px 24px; color:var(--gray); font-size:13px; }
+</style>
+</head>
+<body>
+
+<!-- ===================== SELECT SCREEN ===================== -->
+<div id="selectScreen">
+  <div class="select-hero">
+    <span class="eyebrow">STEP 0 · 시작하기 전에</span>
+    <h1>나만의 공부 사이트, 무엇을 만들까요?</h1>
+    <p>이름, 과목, 만들고 싶은 사이트 종류를 고르면 그 조합에 딱 맞는 만들기 가이드가 시작돼요.</p>
+  </div>
+
+  <div class="select-wrap">
+    <div class="name-card">
+      <label for="nameInput">내 이름</label>
+      <input type="text" id="nameInput" placeholder="예: 김주한">
+    </div>
+
+    <div class="pick-section">
+      <div class="pick-label">1. 과목을 골라주세요</div>
+      <div class="subject-grid" id="subjectGrid">
+        <div class="pick-card reveal" data-key="physics" style="--pick-color:#6C5CE7; --pick-bg:#F1EFFE;">
+          <span class="badge">✓</span><span class="ic">⚛️</span><div class="nm">물리</div><div class="ds">힘·운동·에너지</div>
+        </div>
+        <div class="pick-card reveal" data-key="chemistry" style="--pick-color:#2ECC71; --pick-bg:#EEFBF3;">
+          <span class="badge">✓</span><span class="ic">🧪</span><div class="nm">화학</div><div class="ds">원소·반응·몰</div>
+        </div>
+        <div class="pick-card reveal" data-key="biology" style="--pick-color:#FF6F91; --pick-bg:#FFF0F4;">
+          <span class="badge">✓</span><span class="ic">🧬</span><div class="nm">생명과학</div><div class="ds">세포·유전·물질대사</div>
+        </div>
+        <div class="pick-card reveal" data-key="earth" style="--pick-color:#2E86AB; --pick-bg:#EAF5FA;">
+          <span class="badge">✓</span><span class="ic">🌍</span><div class="nm">지구과학</div><div class="ds">지권·기권·해양</div>
+        </div>
+        <div class="pick-card reveal" data-key="info" style="--pick-color:#00CEC9; --pick-bg:#E9FBFA;">
+          <span class="badge">✓</span><span class="ic">💻</span><div class="nm">정보</div><div class="ds">알고리즘·자료구조</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pick-section">
+      <div class="pick-label">2. 어떤 사이트가 필요한가요?</div>
+      <div class="type-grid" id="typeGrid">
+        <div class="pick-card reveal" data-key="flashcard" style="--pick-color:#F39C12; --pick-bg:#FFF7EA;">
+          <span class="badge">✓</span><span class="ic">🗂️</span><div class="nm">암기카드</div><div class="ds">용어·개념 외우기</div>
+        </div>
+        <div class="pick-card reveal" data-key="quiz" style="--pick-color:#E17055; --pick-bg:#FFF1EC;">
+          <span class="badge">✓</span><span class="ic">📝</span><div class="nm">문제풀이</div><div class="ds">객관식 문제 풀고 채점</div>
+        </div>
+        <div class="pick-card reveal" data-key="wrongnote" style="--pick-color:#0984E3; --pick-bg:#EAF4FE;">
+          <span class="badge">✓</span><span class="ic">📓</span><div class="nm">오답노트</div><div class="ds">틀린 문제 다시 정리</div>
+        </div>
+        <div class="pick-card reveal" data-key="planner" style="--pick-color:#00B894; --pick-bg:#EAFBF6;">
+          <span class="badge">✓</span><span class="ic">⏱️</span><div class="nm">공부계획+타이머</div><div class="ds">할 일과 집중시간 관리</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="start-row">
+      <button class="start-btn" id="startBtn" disabled onclick="startGuide()">가이드 시작하기 →</button>
+      <div class="start-hint" id="startHint">이름, 과목, 사이트 종류를 모두 골라주세요</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== GUIDE SCREEN ===================== -->
+<div id="guideScreen" class="hidden">
+  <div class="guide-nav">
+    <div class="gn-brand"><span id="gnIcon">⚛️</span><span class="txt">공부 사이트 만들기</span></div>
+    <div class="guide-dots">
+      <a class="guide-dot" href="#s1" data-s="1">1</a>
+      <a class="guide-dot" href="#s2" data-s="2">2</a>
+      <a class="guide-dot" href="#s3" data-s="3">3</a>
+      <a class="guide-dot" href="#s4" data-s="4">4</a>
+      <a class="guide-dot" href="#s5" data-s="5">5</a>
+      <a class="guide-dot" href="#s6" data-s="6">6</a>
+    </div>
+    <div class="gn-fill" id="gnFill"></div>
+  </div>
+  <div class="guide-banner">
+    <span class="gicon" id="gIcon">⚛️🗂️</span>
+    <h2><span id="gName">OO</span>님의 <span id="gSubjectName">물리</span> <span id="gTypeName">암기카드</span> 사이트 만들기</h2>
+    <div class="gsub" id="gTagline"></div>
+    <div class="back-link" onclick="backToSelect()">← 처음으로 돌아가서 다시 고르기</div>
+  </div>
+
+  <div class="prep-box">
+    <h3>🎒 시작 전 준비물</h3>
+    <ul>
+      <li>AI 챗봇 화면 (Claude.ai 또는 ChatGPT 등 멘토가 안내하는 것)</li>
+      <li id="prepSubjectHint"></li>
+      <li>궁금한 건 참지 말고 바로 멘토에게 질문하기</li>
+    </ul>
+  </div>
+
+  <section class="step reveal" id="s1">
+    <div class="step-head"><div class="step-num">1</div><h2>목표와 나를 먼저 소개하기</h2></div>
+    <div class="why"><b>왜 이렇게 할까요?</b> AI는 여러분이 누구인지, 무엇을 원하는지 전혀 몰라요. 무작정 "만들어줘"라고 하면 AI가 마음대로 짐작해서 엉뚱한 결과를 줄 수 있어요. 먼저 배경을 설명해주는 것이 좋은 결과의 시작이에요.</div>
+    <div class="prompt-box">
+      <span class="label">이 프롬프트를 복사해서 AI에게 붙여넣으세요</span>
+      <span class="ptext" id="p1"></span>
+      <button class="copy-btn" onclick="copyPrompt(this)">복사하기</button>
+    </div>
+    <div class="check-box">
+      <span class="clabel">✅ 확인해보세요</span>
+      <div class="check-item"><input type="checkbox"><span>AI가 만들어준 파일을 실행해봤나요? (다운로드 후 더블클릭)</span></div>
+      <div class="check-item"><input type="checkbox"><span id="checkItem2"></span></div>
+    </div>
+  </section>
+
+  <section class="step reveal" id="s2">
+    <div class="step-head"><div class="step-num">2</div><h2>이상한 점을 "정확하게" 설명해서 고치기</h2></div>
+    <div class="why"><b>왜 이렇게 할까요?</b> 처음부터 완벽한 결과가 나오는 경우는 드물어요. "이상해요"라고만 말하지 않고, 무엇이 어떻게 이상한지 구체적으로 설명하는 게 핵심이에요.</div>
+    <div class="prompt-box">
+      <span class="label">예시 — 상황에 맞게 바꿔서 사용하세요</span>
+      <span class="ptext" id="p2"></span>
+      <button class="copy-btn" onclick="copyPrompt(this)">복사하기</button>
+    </div>
+    <div class="check-box">
+      <span class="clabel">✅ 확인해보세요</span>
+      <div class="check-item"><input type="checkbox"><span>"이상해요" 대신 "이 부분이 이렇게 됐으면 좋겠어"라고 설명했나요?</span></div>
+    </div>
+  </section>
+
+  <section class="step reveal" id="s3">
+    <div class="step-head"><div class="step-num">3</div><h2>기능은 한 번에 하나씩만 추가하기</h2></div>
+    <div class="why"><b>왜 이렇게 할까요?</b> 여러 개를 한 번에 부탁하면 AI도 헷갈리고, 어디가 문제인지 찾기도 어려워져요. 한 번에 하나씩 부탁하고 확인하는 게 훨씬 안전해요.</div>
+    <div class="prompt-box">
+      <span class="label">기능 1 — 먼저 이것만 부탁해보세요</span>
+      <span class="ptext" id="p3a"></span>
+      <button class="copy-btn" onclick="copyPrompt(this)">복사하기</button>
+    </div>
+    <div class="prompt-box">
+      <span class="label">기능 2 — 위 기능이 잘 되면, 그다음에</span>
+      <span class="ptext" id="p3b"></span>
+      <button class="copy-btn" onclick="copyPrompt(this)">복사하기</button>
+    </div>
+  </section>
+
+  <section class="step reveal" id="s4">
+    <div class="step-head"><div class="step-num">4</div><h2>나만의 규칙을 대화 처음에 정해두기</h2></div>
+    <div class="why"><b>왜 이렇게 할까요?</b> 매번 같은 말을 반복하기는 귀찮죠. 대화 맨 처음에 규칙을 정해두면, AI가 그 이후 요청에도 알아서 규칙을 지켜줘요.</div>
+    <div class="prompt-box">
+      <span class="label">대화 맨 처음에 이렇게 말해보세요</span>
+      <span class="ptext">앞으로 이 대화에서 내가 뭔가 수정해달라고 하면, 항상 파스텔톤 색감을 유지하고 버튼 글씨는 크게 만들어줘. 그리고 전문 용어 없이 쉬운 말로 설명해줘.</span>
+      <button class="copy-btn" onclick="copyPrompt(this)">복사하기</button>
+    </div>
+  </section>
+
+  <section class="step reveal" id="s5">
+    <div class="step-head"><div class="step-num">5</div><h2>내 과목으로 채우고, 진짜로 써보기</h2></div>
+    <div class="why"><b>왜 이렇게 할까요?</b> 오늘 만든 사이트는 "틀"이에요. 진짜 나에게 쓸모 있으려면, 내가 필요한 내용으로 채워야 해요.</div>
+    <div class="preview-box" id="previewBox"></div>
+    <div class="prompt-box">
+      <span class="label">이 프롬프트를 복사해서 사용하세요 (내용은 자유롭게 바꿔도 좋아요)</span>
+      <span class="ptext" id="p5"></span>
+      <button class="copy-btn" onclick="copyPrompt(this)">복사하기</button>
+    </div>
+  </section>
+
+  <div class="open-ai-row">
+    <a class="open-ai-btn" href="https://claude.ai" target="_blank" rel="noopener">AI 챗봇 열어서 바로 시작하기 ↗</a>
+  </div>
+
+  <div class="pitfall">
+    <b>⚠️ 잠깐, 이것만은 꼭 기억하세요.</b><br>
+    AI가 코드를 대신 짜준다고 해서, 여러분이 "이해 안 해도 되는 것"은 아니에요. AI가 만들어준 결과를 보면서 "왜 이렇게 됐지?"를 스스로 생각해보는 습관이 훨씬 더 큰 힘이 돼요. 오늘 배운 건 코드가 아니라, <b>AI와 함께 생각하고 확인하는 방법</b>이에요.
+  </div>
+
+  <!-- ===== STEP 6 : deploy to real web (common to all subjects/types) ===== -->
+  <div class="deploy-section reveal" id="s6">
+    <div class="deploy-wrap">
+      <span class="eyebrow2">STEP 6 · 모두 함께</span>
+      <h2>완성한 파일을, 진짜 인터넷 주소가 있는 사이트로</h2>
+      <p style="color:#C7CEDA; font-size:15px; margin-bottom:30px;">지금까지 만든 건 내 컴퓨터에만 있는 HTML 파일이에요. 아래 방법을 따라 하면, 코드를 몰라도 <b style="color:#fff">전 세계 어디서나 접속 가능한 진짜 주소</b>를 가진 웹사이트로 바꿀 수 있어요. 과목이나 종류와 상관없이 똑같은 방법이 통해요.</p>
+
+      <div class="deploy-step">
+        <div class="deploy-num">🖱️</div>
+        <div class="dtxt"><b>Netlify Drop 페이지 열기</b><span>브라우저에서 app.netlify.com/drop 으로 들어가요. 회원가입 없이도 바로 쓸 수 있어요.</span></div>
+      </div>
+      <div class="deploy-step">
+        <div class="deploy-num">📂</div>
+        <div class="dtxt"><b>완성한 HTML 파일을 화면 위로 드래그</b><span>내 컴퓨터에 저장된 파일을 마우스로 끌어다가, 점선으로 표시된 영역 위에 놓기만 하면 돼요.</span></div>
+      </div>
+      <div class="deploy-step">
+        <div class="deploy-num">🔗</div>
+        <div class="dtxt"><b>몇 초 기다리면 주소가 생겨요</b><span>업로드가 끝나면 "https://이상한이름.netlify.app" 같은 실제 주소가 만들어져요. 이게 내 사이트의 진짜 인터넷 주소예요.</span></div>
+      </div>
+      <div class="deploy-step">
+        <div class="deploy-num">📣</div>
+        <div class="dtxt"><b>친구에게 공유하거나, 즐겨찾기 해두기</b><span>이 주소만 있으면 언제 어디서든, 어떤 기기로든 내가 만든 사이트에 접속할 수 있어요.</span></div>
+      </div>
+
+      <div class="open-ai-row" style="margin-top:20px;">
+        <a class="open-ai-btn" href="https://app.netlify.com/drop" target="_blank" rel="noopener" onclick="markStepDone(this)">Netlify Drop 열어서 바로 올려보기 ↗</a>
+      </div>
+
+      <div class="prep-box" style="background:rgba(255,255,255,.06); margin-top:26px;">
+        <h3 style="color:var(--accent-light);">💡 더 해보고 싶다면</h3>
+        <ul style="color:#D9E0EC;">
+          <li>GitHub Pages — 코드를 버전별로 관리하면서 배포하고 싶을 때 (조금 더 개발자스러운 방법)</li>
+          <li>내용을 업데이트하고 싶으면, 같은 파일을 다시 Netlify Drop에 올리면 주소는 그대로 유지돼요</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="final">
+    <h3>🚀 다 만들었다면, 이런 것도 시도해보세요</h3>
+    <div id="ideaChips"></div>
+  </div>
+
+  <footer>멘토링 연구 프로젝트 · 옥쌤과 아이들</footer>
+</div>
+
+<script>
+/* ============================================================
+   나만의 공부 사이트 만들기 · 과목별 가이드
+   -----------------------------------------------------------
+   구조:
+     1) SELECT SCREEN (#selectScreen) — 이름 입력 + 과목/사이트종류 선택
+     2) GUIDE SCREEN   (#guideScreen)  — STEP1~5 프롬프트 가이드 +
+                                          STEP6 배포 가이드 (공통)
+   데이터는 전부 SUBJECTS / TYPES 두 객체에서 관리하고,
+   startGuide()가 그 둘을 조합해 화면을 채웁니다.
+   외부 라이브러리 없이 순수 HTML/CSS/JS로만 동작하며,
+   파일 하나를 그대로 브라우저로 열거나 웹에 올리기만 하면 됩니다.
+   ============================================================ */
+/* ============================================================
+   SUBJECTS 데이터
+   -----------------------------------------------------------
+   과목(물리/화학/생명과학/지구과학/정보)별 콘텐츠를 여기서 관리합니다.
+   새 과목을 추가하려면:
+     1. 아래에 새 key(예: "art")로 객체를 추가
+     2. name/icon/accent(테마색)/topicHint 채우기
+     3. cards: 암기카드용 [용어, 설명] 배열 3개 이상
+     4. problem: 문제풀이·오답노트용 {q, choices, answer, explain}
+     5. tasks: 공부계획용 오늘 할 일 문장 배열
+     6. ideas: STEP 마지막에 보여줄 확장 아이디어 문장 배열
+     7. index.html의 <div class="subject-grid"> 안에 픽카드(.pick-card) 하나 추가
+        (data-key 값을 여기서 정한 key와 동일하게)
+   ============================================================ */
+const SUBJECTS = {
+  physics:{ name:'물리', icon:'⚛️', accent:'#6C5CE7', accentLight:'#A29BFE',
+    topicHint:'물리 공식', cards:[['F = ma','뉴턴 제2법칙 — 힘은 질량과 가속도의 곱'],['v = v₀ + at','등가속도 운동에서 속도 구하는 식'],['E = mc²','질량-에너지 등가 원리']],
+    problem:{ q:'질량 2kg인 물체에 4N의 힘을 가하면 가속도는?', choices:['1 m/s²','2 m/s²','8 m/s²'], answer:'2 m/s²', explain:'F=ma 이므로 a=F/m=4/2=2 m/s²' },
+    tasks:['뉴턴 법칙 공식 3개 다시 써보기','물리 문제집 2쪽 풀기','오늘 배운 개념 한 문장으로 요약하기'],
+    ideas:['운동 법칙 카드 묶음 따로 만들기','공식에 단위까지 같이 외우는 카드','틀린 문제만 다시 모아보는 기능'] },
+  chemistry:{ name:'화학', icon:'🧪', accent:'#2ECC71', accentLight:'#7BE0A8',
+    topicHint:'원소·반응식·개념', cards:[['Na','나트륨 — 원자번호 11번, 알칼리 금속'],['산화-환원','전자를 잃으면 산화, 얻으면 환원'],['mol (몰)','입자 6.02×10²³개를 묶어 세는 단위']],
+    problem:{ q:'다음 중 알칼리 금속은?', choices:['Na','Fe','O'], answer:'Na', explain:'Na(나트륨)은 1족 알칼리 금속입니다.' },
+    tasks:['원소기호 10개 외우기','화학 반응식 균형 맞추기 연습','오늘 배운 개념 한 문장으로 요약하기'],
+    ideas:['원소기호 카드만 따로 묶기','반응식 완성하기 퀴즈 모드','주기율표 위치 맞히기 기능'] },
+  biology:{ name:'생명과학', icon:'🧬', accent:'#FF6F91', accentLight:'#FFB0C4',
+    topicHint:'생물 용어', cards:[['미토콘드리아','세포호흡이 일어나는 세포 소기관'],['삼투','물이 저농도에서 고농도로 이동하는 현상'],['DNA','유전정보를 저장하는 이중나선 구조']],
+    problem:{ q:'세포호흡이 일어나는 장소는?', choices:['미토콘드리아','리보솜','핵'], answer:'미토콘드리아', explain:'미토콘드리아에서 산소를 이용해 에너지를 만듭니다.' },
+    tasks:['세포 소기관 이름과 역할 복습하기','생명과학 문제집 2쪽 풀기','오늘 배운 용어 한 문장으로 요약하기'],
+    ideas:['세포 소기관 카드만 따로 묶기','용어 뜻 맞히기 퀴즈 모드','단원별로 카드 묶음 나누기'] },
+  earth:{ name:'지구과학', icon:'🌍', accent:'#2E86AB', accentLight:'#7FC1DE',
+    topicHint:'지구과학 현상·용어', cards:[['판게아','과거 지구의 모든 대륙이 뭉쳐 있던 초대륙'],['엘니뇨','태평양 해수 온도가 비정상적으로 높아지는 현상'],['조산운동','판이 부딪히며 산맥이 만들어지는 과정']],
+    problem:{ q:'태평양 해수온도가 비정상적으로 높아지는 현상은?', choices:['라니냐','엘니뇨','밀란코비치'], answer:'엘니뇨', explain:'엘니뇨는 무역풍 약화로 인한 해수온 상승 현상입니다.' },
+    tasks:['지구 시스템 상호작용 그림 다시 그려보기','지구과학 문제집 2쪽 풀기','오늘 배운 현상 한 문장으로 요약하기'],
+    ideas:['대기·해양 현상 카드만 따로 묶기','지도 이미지와 함께 외우는 카드','지질시대 순서 맞히기 기능'] },
+  info:{ name:'정보', icon:'💻', accent:'#00CEC9', accentLight:'#66E0DB',
+    topicHint:'정보 개념·알고리즘', cards:[['재귀함수','자기 자신을 다시 호출하는 함수'],['이진 탐색','정렬된 데이터에서 반씩 줄여가며 찾는 방법'],['시간복잡도','입력 크기에 따라 알고리즘이 얼마나 오래 걸리는지 측정']],
+    problem:{ q:'정렬된 데이터에서 반씩 줄여가며 찾는 방법은?', choices:['이진 탐색','선형 탐색','재귀호출'], answer:'이진 탐색', explain:'이진 탐색은 매번 탐색 범위를 절반으로 줄입니다.' },
+    tasks:['알고리즘 개념 다시 정리하기','코드 한 줄씩 손으로 따라 써보기','오늘 배운 개념 한 문장으로 요약하기'],
+    ideas:['알고리즘별로 카드 묶음 나누기','코드 한 줄 보고 개념 맞히기 카드','개념 설명을 그림으로 바꿔보기'] }
+};
+
+/* ============================================================
+   TYPES 데이터
+   -----------------------------------------------------------
+   사이트 종류(암기카드/문제풀이/오답노트/공부계획+타이머)별
+   프롬프트 문구를 관리합니다.
+   새 종류를 추가하려면:
+     1. 아래에 새 key로 객체 추가 (name/icon/tagline/buildGoal 등)
+     2. p1Suffix~checkItem2: STEP1~2 프롬프트/체크리스트 문구
+     3. f1/f2: STEP3 "기능 하나씩 추가하기" 프롬프트 2개
+     4. startGuide() 함수의 if(pickedType === '...') 분기에도
+        STEP5 미리보기(previewBox)와 p5text를 추가해줘야 함
+     5. index.html의 <div class="type-grid"> 안에 픽카드 하나 추가
+   ============================================================ */
+const TYPES = {
+  flashcard:{ name:'암기카드', icon:'🗂️', tagline:'개념을 카드로 넘기며 외우는 사이트',
+    buildGoal:'암기카드(플래시카드) 웹사이트',
+    p1Suffix:'카드를 클릭하면 앞면(질문)에서 뒷면(답)으로 뒤집히는 방식이면 좋겠어.',
+    p2:'카드를 클릭했을 때 뒤집히는 애니메이션이 없이 그냥 텍스트만 바뀌어서 아쉬워. 부드럽게 회전하면서 뒤집히는 느낌으로 만들어줄 수 있어?',
+    f1:'카드 순서를 무작위로 섞어주는 "섞기" 버튼을 추가해줘.',
+    f2:'지금까지 몇 개의 카드를 확인했는지 화면에 "3/10" 처럼 표시해줘.',
+    checkItem2:'카드를 클릭하면 실제로 뒤집히나요?' },
+  quiz:{ name:'문제풀이', icon:'📝', tagline:'문제를 풀고 바로 채점받는 사이트',
+    buildGoal:'객관식 문제풀이 웹사이트',
+    p1Suffix:'문제를 보여주고 보기 중 하나를 고르면 정답인지 바로 알려주는 방식이면 좋겠어.',
+    p2:'정답을 골랐을 때 그냥 "정답" 또는 "오답"만 나와서 아쉬워. 왜 그 답이 맞는지 짧은 설명도 같이 보여주도록 고쳐줄 수 있어?',
+    f1:'맞은 문제와 틀린 문제 개수를 화면 위에 표시해줘.',
+    f2:'문제 순서를 무작위로 섞어주는 기능을 추가해줘.',
+    checkItem2:'보기를 클릭하면 정답인지 바로 알려주나요?' },
+  wrongnote:{ name:'오답노트', icon:'📓', tagline:'틀린 문제를 모아서 다시 정리하는 사이트',
+    buildGoal:'오답노트 웹사이트',
+    p1Suffix:'문제, 내가 쓴 오답, 정답과 풀이를 각각 적어서 카드 형태로 모아두는 방식이면 좋겠어.',
+    p2:'카드가 전부 한 줄로만 나와서 내용이 잘 안 보여. 문제/오답/정답/풀이를 구역별로 나눠서 좀 더 보기 편하게 만들어줄 수 있어?',
+    f1:'"다시 풀어볼 문제"만 따로 모아 보여주는 필터 버튼을 추가해줘.',
+    f2:'새 문제를 추가할 수 있는 입력 폼을 화면에 넣어줘.',
+    checkItem2:'문제와 오답, 정답이 각각 구분되어 보이나요?' },
+  planner:{ name:'공부계획+타이머', icon:'⏱️', tagline:'오늘 할 일과 집중 시간을 관리하는 사이트',
+    buildGoal:'공부 계획 및 타이머 웹사이트',
+    p1Suffix:'오늘 할 일을 적으면 목록에 뜨고, 버튼을 누르면 25분 집중 타이머가 시작되는 방식이면 좋겠어.',
+    p2:'타이머가 끝나도 아무 표시가 없어서 몰랐어. 시간이 다 되면 화면 색이 바뀌거나 알림음이 나도록 고쳐줄 수 있어?',
+    f1:'완료한 할 일에 체크 표시가 되고, 취소선이 그어지게 해줘.',
+    f2:'오늘 몇 개의 할 일을 끝냈는지 화면 위에 표시해줘.',
+    checkItem2:'할 일을 적으면 목록에 실제로 추가되나요?' }
+};
+
+const selectRevealIO = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); selectRevealIO.unobserve(e.target); } });
+}, {threshold:0.1});
+document.querySelectorAll('#selectScreen .reveal').forEach(el=>selectRevealIO.observe(el));
+
+let pickedSubject = null;
+let pickedType = null;
+
+document.querySelectorAll('#subjectGrid .pick-card').forEach(card=>{
+  card.addEventListener('click', ()=>{
+    document.querySelectorAll('#subjectGrid .pick-card').forEach(c=>c.classList.remove('picked'));
+    card.classList.add('picked');
+    pickedSubject = card.dataset.key;
+    checkReady();
+  });
+});
+document.querySelectorAll('#typeGrid .pick-card').forEach(card=>{
+  card.addEventListener('click', ()=>{
+    document.querySelectorAll('#typeGrid .pick-card').forEach(c=>c.classList.remove('picked'));
+    card.classList.add('picked');
+    pickedType = card.dataset.key;
+    checkReady();
+  });
+});
+document.getElementById('nameInput').addEventListener('input', checkReady);
+
+function checkReady(){
+  const name = document.getElementById('nameInput').value.trim();
+  const btn = document.getElementById('startBtn');
+  const hint = document.getElementById('startHint');
+  if(name && pickedSubject && pickedType){
+    btn.disabled = false;
+    hint.textContent = '준비 완료! 시작해볼까요?';
+  } else {
+    btn.disabled = true;
+    hint.textContent = '이름, 과목, 사이트 종류를 모두 골라주세요';
+  }
+}
+
+/* startGuide()
+   과목+종류가 정해지면 호출됨. 테마 색상(CSS 변수 --accent)을 바꾸고,
+   SUBJECTS/TYPES 데이터를 조합해 배너·프롬프트·미리보기를 채운 뒤
+   선택 화면을 숨기고 가이드 화면을 보여준다.
+   STEP5 미리보기(previewBox)는 pickedType 값에 따라 분기 처리된다 —
+   새 사이트 종류를 추가했다면 이 if/else if 체인에도 분기를 추가할 것. */
+function startGuide(){
+  const name = document.getElementById('nameInput').value.trim();
+  const s = SUBJECTS[pickedSubject];
+  const t = TYPES[pickedType];
+
+  document.documentElement.style.setProperty('--accent', s.accent);
+  document.documentElement.style.setProperty('--accent-light', s.accentLight);
+
+  document.getElementById('gIcon').textContent = s.icon + ' ' + t.icon;
+  document.getElementById('gName').textContent = name;
+  document.getElementById('gSubjectName').textContent = s.name;
+  document.getElementById('gTypeName').textContent = t.name;
+  document.getElementById('gTagline').textContent = t.tagline;
+  document.getElementById('prepSubjectHint').textContent = '오늘 다룰 ' + s.name + ' ' + s.topicHint + ' 3~5개 정도 생각해오기';
+  document.getElementById('checkItem2').textContent = t.checkItem2;
+
+  document.getElementById('p1').textContent =
+    '나는 중학생이고, 혼자 ' + s.name + ' 공부할 때 쓸 ' + t.buildGoal + '을 만들고 싶어. HTML 파일 하나로 만들어줘. ' + t.p1Suffix + ' 어려운 설명 없이, 완성된 파일만 보여줘.';
+  document.getElementById('p2').textContent = t.p2;
+  document.getElementById('p3a').textContent = t.f1;
+  document.getElementById('p3b').textContent = t.f2;
+
+  const previewBox = document.getElementById('previewBox');
+  previewBox.innerHTML = '';
+  let p5text = '';
+
+  if(pickedType === 'flashcard'){
+    s.cards.forEach(c=>{
+      const div = document.createElement('div');
+      div.className = 'mini-card';
+      div.innerHTML = '<div class="front">' + c[0] + '</div><div class="back">' + c[1] + '</div>';
+      previewBox.appendChild(div);
+    });
+    const lines = s.cards.map(c => c[0] + ' - ' + c[1]).join('\n');
+    p5text = '지금 카드 내용을 아래 ' + s.name + ' 내용으로 바꿔줘.\n' + lines + '\n(원하는 내용을 더 추가해서 부탁해보세요)';
+  } else if(pickedType === 'quiz'){
+    const p = s.problem;
+    const div = document.createElement('div');
+    div.className = 'mini-card mini-quiz';
+    div.innerHTML = '<div class="q">' + p.q + '</div>' +
+      p.choices.map(c => '<span class="choice' + (c===p.answer?' correct':'') + '">' + c + '</span>').join('');
+    previewBox.appendChild(div);
+    p5text = '지금 문제를 아래 내용으로 바꿔줘.\n문제: ' + p.q + '\n보기: ' + p.choices.join(' / ') + '\n정답: ' + p.answer + '\n해설: ' + p.explain + '\n(원하는 문제를 더 추가해서 부탁해보세요)';
+  } else if(pickedType === 'wrongnote'){
+    const p = s.problem;
+    const div = document.createElement('div');
+    div.className = 'mini-card mini-note';
+    div.innerHTML = '<div class="row"><b>문제</b> ' + p.q + '</div><div class="row"><b>내가 쓴 답</b> (틀렸던 답)</div><div class="row"><b>정답</b> ' + p.answer + '</div><div class="row"><b>풀이</b> ' + p.explain + '</div>';
+    previewBox.appendChild(div);
+    p5text = '오답노트에 아래 내용을 추가해줘.\n문제: ' + p.q + '\n내가 쓴 답: (틀렸던 답을 적어보세요)\n정답: ' + p.answer + '\n풀이: ' + p.explain + '\n(원하는 문제를 더 추가해서 부탁해보세요)';
+  } else if(pickedType === 'planner'){
+    s.tasks.forEach(task=>{
+      const div = document.createElement('div');
+      div.className = 'mini-todo';
+      div.innerHTML = '<span>☐</span><span>' + task + '</span>';
+      previewBox.appendChild(div);
+    });
+    const lines = s.tasks.map(x => '- ' + x).join('\n');
+    p5text = '오늘 할 일 목록을 아래로 채워줘.\n' + lines + '\n(원하는 할 일을 더 추가해서 부탁해보세요)';
+  }
+  document.getElementById('p5').textContent = p5text;
+
+  const ideaEl = document.getElementById('ideaChips');
+  ideaEl.innerHTML = '';
+  s.ideas.forEach(i=>{
+    const span = document.createElement('span');
+    span.className = 'idea-chip';
+    span.textContent = i;
+    ideaEl.appendChild(span);
+  });
+
+  document.getElementById('gnIcon').textContent = s.icon;
+
+  document.getElementById('selectScreen').classList.add('hidden');
+  document.getElementById('guideScreen').classList.remove('hidden');
+  window.scrollTo(0,0);
+  initGuideScrollFx();
+}
+
+let guideFxReady = false;
+function initGuideScrollFx(){
+  if(guideFxReady) return;
+  guideFxReady = true;
+
+  const dots = document.querySelectorAll('.guide-dot');
+  const guideSections = ['s1','s2','s3','s4','s5','s6'].map(id => document.getElementById(id));
+  const spyIO = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        dots.forEach(d=>d.classList.remove('active'));
+        const idx = guideSections.indexOf(e.target);
+        if(dots[idx]) dots[idx].classList.add('active');
+      }
+    });
+  }, {rootMargin:"-35% 0px -55% 0px"});
+  guideSections.forEach(s=>{ if(s) spyIO.observe(s); });
+
+  document.addEventListener('scroll', ()=>{
+    const h = document.documentElement;
+    const pct = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+    const fill = document.getElementById('gnFill');
+    if(fill) fill.style.width = Math.max(0,Math.min(100,pct)) + '%';
+  });
+
+  const revealIO = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); revealIO.unobserve(e.target); } });
+  }, {threshold:0.12});
+  document.querySelectorAll('#guideScreen .reveal').forEach(el=>revealIO.observe(el));
+}
+
+function markStepDone(btn){
+  const section = btn.closest('section.step, .deploy-section');
+  if(!section) return;
+  const idx = ['s1','s2','s3','s4','s5','s6'].indexOf(section.id);
+  if(idx === -1) return;
+  const dot = document.querySelectorAll('.guide-dot')[idx];
+  if(dot) dot.classList.add('done');
+}
+
+function backToSelect(){
+  document.getElementById('guideScreen').classList.add('hidden');
+  document.getElementById('selectScreen').classList.remove('hidden');
+  window.scrollTo(0,0);
+}
+
+function copyPrompt(btn){
+  const text = btn.parentElement.querySelector('.ptext').textContent;
+  const finish = ()=>{
+    btn.textContent = '복사됨 ✓';
+    btn.classList.add('copied');
+    markStepDone(btn);
+    setTimeout(()=>{ btn.textContent = '복사하기'; btn.classList.remove('copied'); }, 1800);
+  };
+  navigator.clipboard.writeText(text).then(finish).catch(()=>{
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    finish();
+  });
+}
+</script>
+</body>
+</html>
