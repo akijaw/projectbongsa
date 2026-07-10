@@ -113,7 +113,34 @@
   .prep-box li{ margin-bottom:6px; }
 
   section.step{ padding:52px 24px 0; max-width:820px; margin:0 auto; }
-  .step-head{ display:flex; align-items:center; gap:16px; margin-bottom:8px; }
+  .step-head{ display:flex; align-items:center; gap:16px; margin-bottom:8px; flex-wrap:wrap; }
+  .axis-badge{
+    font-size:11.5px; font-weight:700; letter-spacing:.5px; color:var(--accent);
+    background:var(--light); border:1px solid var(--line); border-radius:999px; padding:4px 11px;
+    margin-left:auto;
+  }
+  @media (max-width:520px){ .axis-badge{ margin-left:0; } }
+
+  /* ---- advanced (심화) section ---- */
+  .adv-section{ background:linear-gradient(180deg,#1B1030,#241640); color:#fff; padding:60px 24px; margin-top:20px; }
+  .adv-wrap{ max-width:820px; margin:0 auto; }
+  .adv-wrap .eyebrow3{ font-size:13px; font-weight:700; letter-spacing:3px; color:#C9A9FF; text-transform:uppercase; }
+  .adv-wrap h2{ font-size:28px; margin:10px 0 6px; }
+  .adv-wrap > p.lead{ color:#D3C6F0; font-size:15px; margin-bottom:30px; }
+  .axis-table{ width:100%; border-collapse:collapse; margin:18px 0 34px; font-size:14px; }
+  .axis-table th, .axis-table td{ text-align:left; padding:10px 12px; border-bottom:1px solid rgba(255,255,255,.12); }
+  .axis-table th{ color:#C9A9FF; font-weight:700; font-size:12.5px; letter-spacing:.5px; }
+  .axis-table td.doneMark{ color:#8CE0C8; font-weight:700; }
+  .adv-card{ background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); border-radius:16px; padding:22px 24px; margin-bottom:18px; }
+  .adv-card h3{ margin:0 0 10px; font-size:17px; color:#fff; }
+  .adv-card p{ font-size:14.5px; color:#D3C6F0; margin:0 0 10px; }
+  .adv-card .tag-optional{ display:inline-block; background:#3A2A5C; color:#C9A9FF; font-size:11px; font-weight:700; padding:3px 10px; border-radius:999px; margin-bottom:10px; }
+  .adv-code{ background:#0F0A1E; border-radius:10px; padding:14px 16px; font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#B9F5DD; white-space:pre; overflow-x:auto; margin:10px 0; }
+  .karpathy-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:8px; }
+  @media (max-width:600px){ .karpathy-grid{ grid-template-columns:1fr; } }
+  .karpathy-item{ background:rgba(255,255,255,.05); border-radius:12px; padding:14px 16px; }
+  .karpathy-item b{ display:block; font-size:13.5px; color:#C9A9FF; margin-bottom:4px; }
+  .karpathy-item span{ font-size:13px; color:#D3C6F0; }
   .step-num{
     width:44px; height:44px; border-radius:50%; background:var(--accent); color:var(--navy-dark);
     display:flex; align-items:center; justify-content:center; font-weight:700; font-size:19px; flex:none;
@@ -192,8 +219,8 @@
 <div id="selectScreen">
   <div class="select-hero">
     <span class="eyebrow">STEP 0 · 시작하기 전에</span>
-    <h1>나만의 공부 사이트, 무엇을 만들까요?</h1>
-    <p>이름, 과목, 만들고 싶은 사이트 종류를 고르면 그 조합에 딱 맞는 만들기 가이드가 시작돼요.</p>
+    <h1>터미널부터 배포까지, 진짜 웹 서비스를 만든다</h1>
+    <p>이름, 과목, 만들고 싶은 사이트 종류를 고르면, Claude Code로 터미널에서 프로젝트를 켜는 것부터 CLAUDE.md 작성, Hook, 데이터베이스 연결, 실제 배포까지 전 과정을 그대로 따라가는 가이드가 시작돼요.</p>
   </div>
 
   <div class="select-wrap">
@@ -259,6 +286,8 @@
       <a class="guide-dot" href="#s4" data-s="4">4</a>
       <a class="guide-dot" href="#s5" data-s="5">5</a>
       <a class="guide-dot" href="#s6" data-s="6">6</a>
+      <a class="guide-dot" href="#s7" data-s="7">7</a>
+      <a class="guide-dot" href="#s8" data-s="8">8</a>
     </div>
     <div class="gn-fill" id="gnFill"></div>
   </div>
@@ -272,44 +301,78 @@
   <div class="prep-box">
     <h3>🎒 시작 전 준비물</h3>
     <ul>
-      <li>AI 챗봇 화면 (Claude.ai 또는 ChatGPT 등 멘토가 안내하는 것)</li>
+      <li>터미널을 쓸 수 있는 노트북 (Mac 또는 Windows), Node.js 설치</li>
+      <li>Claude Code (터미널에서 쓰는 AI 코딩 도구) — 없으면 STEP1에서 같이 설치</li>
       <li id="prepSubjectHint"></li>
       <li>궁금한 건 참지 말고 바로 멘토에게 질문하기</li>
     </ul>
   </div>
 
   <section class="step reveal" id="s1">
-    <div class="step-head"><div class="step-num">1</div><h2>목표와 나를 먼저 소개하기</h2></div>
-    <div class="why"><b>왜 이렇게 할까요?</b> AI는 여러분이 누구인지, 무엇을 원하는지 전혀 몰라요. 무작정 "만들어줘"라고 하면 AI가 마음대로 짐작해서 엉뚱한 결과를 줄 수 있어요. 먼저 배경을 설명해주는 것이 좋은 결과의 시작이에요.</div>
+    <div class="step-head"><div class="step-num">1</div><h2>개발 환경 켜기</h2><span class="axis-badge">하네스 · 구조</span></div>
+    <div class="why"><b>왜 이렇게 할까요?</b> 실제 개발자들은 채팅창이 아니라 <b>터미널</b>에서 AI 코딩 도구를 켜고 작업해요. 오늘은 여러분도 Claude Code라는 도구를 실제로 터미널에서 실행하면서, 프로젝트가 어떤 구조로 시작되는지부터 익혀볼 거예요.</div>
     <div class="prompt-box">
-      <span class="label">이 프롬프트를 복사해서 AI에게 붙여넣으세요</span>
-      <span class="ptext" id="p1"></span>
+      <span class="label">터미널에 차례로 입력하세요</span>
+      <span class="ptext" id="envCmd"></span>
       <button class="copy-btn" onclick="copyPrompt(this)">복사하기</button>
     </div>
     <div class="check-box">
       <span class="clabel">✅ 확인해보세요</span>
-      <div class="check-item"><input type="checkbox"><span>AI가 만들어준 파일을 실행해봤나요? (다운로드 후 더블클릭)</span></div>
-      <div class="check-item"><input type="checkbox"><span id="checkItem2"></span></div>
+      <div class="check-item"><input type="checkbox"><span>claude 명령어를 실행하면 AI가 응답하는 화면이 뜨나요?</span></div>
+      <div class="check-item"><input type="checkbox"><span>내 프로젝트 폴더 안에서 실행한 게 맞나요? (pwd 명령어로 확인)</span></div>
     </div>
   </section>
 
   <section class="step reveal" id="s2">
-    <div class="step-head"><div class="step-num">2</div><h2>이상한 점을 "정확하게" 설명해서 고치기</h2></div>
-    <div class="why"><b>왜 이렇게 할까요?</b> 처음부터 완벽한 결과가 나오는 경우는 드물어요. "이상해요"라고만 말하지 않고, 무엇이 어떻게 이상한지 구체적으로 설명하는 게 핵심이에요.</div>
+    <div class="step-head"><div class="step-num">2</div><h2>CLAUDE.md로 맥락 심어주기</h2><span class="axis-badge">하네스 · 맥락</span></div>
+    <div class="why"><b>왜 이렇게 할까요?</b> 매번 채팅으로 같은 설명을 반복하는 대신, <b>CLAUDE.md</b>라는 파일 하나에 프로젝트의 배경과 규칙을 적어두면 AI가 세션을 새로 시작해도 그 내용을 계속 기억해요. 이런 파일에는 두 단계가 있어요 — 모든 프로젝트에 공통으로 적용되는 <b>전역 설정</b>과, 이 프로젝트에만 적용되는 <b>프로젝트 설정</b>.</div>
+    <div class="adv-code">~/.claude/CLAUDE.md   ← 전역 (모든 프로젝트 공통 규칙)
+./CLAUDE.md            ← 프로젝트 (이 사이트만의 규칙)</div>
     <div class="prompt-box">
-      <span class="label">예시 — 상황에 맞게 바꿔서 사용하세요</span>
-      <span class="ptext" id="p2"></span>
+      <span class="label">이 프로젝트 루트에 CLAUDE.md를 만들어달라고 부탁하세요</span>
+      <span class="ptext" id="claudeMdPrompt"></span>
       <button class="copy-btn" onclick="copyPrompt(this)">복사하기</button>
     </div>
+    <div class="why" style="margin-top:14px;"><b>Tip.</b> CLAUDE.md는 짧게 유지하는 게 좋아요 — 매 세션마다 통째로 읽히기 때문에, 길어지면 그만큼 낭비예요. 필요한 자세한 설명은 나중에 배울 Skill로 분리해요.</div>
     <div class="check-box">
       <span class="clabel">✅ 확인해보세요</span>
-      <div class="check-item"><input type="checkbox"><span>"이상해요" 대신 "이 부분이 이렇게 됐으면 좋겠어"라고 설명했나요?</span></div>
+      <div class="check-item"><input type="checkbox"><span>프로젝트 폴더 안에 CLAUDE.md 파일이 실제로 생겼나요? (ls 또는 파일탐색기로 확인)</span></div>
     </div>
   </section>
 
   <section class="step reveal" id="s3">
-    <div class="step-head"><div class="step-num">3</div><h2>기능은 한 번에 하나씩만 추가하기</h2></div>
-    <div class="why"><b>왜 이렇게 할까요?</b> 여러 개를 한 번에 부탁하면 AI도 헷갈리고, 어디가 문제인지 찾기도 어려워져요. 한 번에 하나씩 부탁하고 확인하는 게 훨씬 안전해요.</div>
+    <div class="step-head"><div class="step-num">3</div><h2>Plan Mode로 설계부터 하기</h2><span class="axis-badge">하네스 · 계획</span></div>
+    <div class="why"><b>왜 이렇게 할까요?</b> 바로 "만들어줘"라고 하면 AI가 여러분 머릿속 전제를 다 담지 못한 채로 짐작해서 진행해요. <b>Plan Mode</b>로 들어가면 AI가 코드를 쓰기 전에 먼저 질문하고, 계획을 세운 뒤 승인을 받고 나서야 실행해요 — 시간은 조금 더 걸리지만 완성도가 훨씬 높아져요.</div>
+    <div class="prompt-box">
+      <span class="label">터미널에서 Plan Mode로 들어간 뒤 (Shift+Tab 또는 /plan 입력) 이렇게 부탁하세요</span>
+      <span class="ptext" id="planPrompt"></span>
+      <button class="copy-btn" onclick="copyPrompt(this)">복사하기</button>
+    </div>
+    <div class="why" style="margin-top:14px;"><b>사람이 할 일.</b> AI가 던지는 질문에 하나씩 답하고, 마지막에 나온 계획을 읽어본 뒤 문제없으면 승인(Yes)하세요.</div>
+    <div class="check-box">
+      <span class="clabel">✅ 확인해보세요</span>
+      <div class="check-item"><input type="checkbox"><span>index.html / style.css / script.js 같은 파일들이 만들어졌나요?</span></div>
+    </div>
+  </section>
+
+  <section class="step reveal" id="s4">
+    <div class="step-head"><div class="step-num">4</div><h2>실행해서 확인하고, 정확하게 다듬기</h2><span class="axis-badge">하네스 · 실행 · 검증</span></div>
+    <div class="why"><b>왜 이렇게 할까요?</b> 처음부터 완벽하게 나오는 경우는 드물어요. 결과를 직접 열어서 확인하고, "이상해요" 대신 <b>무엇이 어떻게 이상한지 구체적으로</b> 설명해서 고쳐나가는 게 핵심이에요. 기능도 여러 개를 한 번에 부탁하지 말고 하나씩 확인하며 쌓아가세요.</div>
+    <div class="prompt-box">
+      <span class="label">Mac 터미널</span>
+      <span class="ptext">open index.html</span>
+      <button class="copy-btn" onclick="copyPrompt(this)">복사하기</button>
+    </div>
+    <div class="prompt-box">
+      <span class="label">Windows 터미널</span>
+      <span class="ptext">start index.html</span>
+      <button class="copy-btn" onclick="copyPrompt(this)">복사하기</button>
+    </div>
+    <div class="prompt-box">
+      <span class="label">고쳐달라고 할 때 — 예시</span>
+      <span class="ptext" id="p2"></span>
+      <button class="copy-btn" onclick="copyPrompt(this)">복사하기</button>
+    </div>
     <div class="prompt-box">
       <span class="label">기능 1 — 먼저 이것만 부탁해보세요</span>
       <span class="ptext" id="p3a"></span>
@@ -320,72 +383,138 @@
       <span class="ptext" id="p3b"></span>
       <button class="copy-btn" onclick="copyPrompt(this)">복사하기</button>
     </div>
-  </section>
-
-  <section class="step reveal" id="s4">
-    <div class="step-head"><div class="step-num">4</div><h2>나만의 규칙을 대화 처음에 정해두기</h2></div>
-    <div class="why"><b>왜 이렇게 할까요?</b> 매번 같은 말을 반복하기는 귀찮죠. 대화 맨 처음에 규칙을 정해두면, AI가 그 이후 요청에도 알아서 규칙을 지켜줘요.</div>
-    <div class="prompt-box">
-      <span class="label">대화 맨 처음에 이렇게 말해보세요</span>
-      <span class="ptext">앞으로 이 대화에서 내가 뭔가 수정해달라고 하면, 항상 파스텔톤 색감을 유지하고 버튼 글씨는 크게 만들어줘. 그리고 전문 용어 없이 쉬운 말로 설명해줘.</span>
-      <button class="copy-btn" onclick="copyPrompt(this)">복사하기</button>
+    <div class="check-box">
+      <span class="clabel">✅ 확인해보세요</span>
+      <div class="check-item"><input type="checkbox"><span id="checkItem2"></span></div>
+      <div class="check-item"><input type="checkbox"><span>"이상해요" 대신 "이 부분이 이렇게 됐으면 좋겠어"라고 구체적으로 설명했나요?</span></div>
     </div>
   </section>
 
   <section class="step reveal" id="s5">
-    <div class="step-head"><div class="step-num">5</div><h2>내 과목으로 채우고, 진짜로 써보기</h2></div>
-    <div class="why"><b>왜 이렇게 할까요?</b> 오늘 만든 사이트는 "틀"이에요. 진짜 나에게 쓸모 있으려면, 내가 필요한 내용으로 채워야 해요.</div>
-    <div class="preview-box" id="previewBox"></div>
+    <div class="step-head"><div class="step-num">5</div><h2>Hook으로 안전장치 만들기</h2><span class="axis-badge">하네스 · 구조 심화</span></div>
+    <div class="why"><b>왜 이렇게 할까요?</b> 지금까지 만든 규칙은 AI가 "알아서 판단해서" 지키는 것들이었어요. <b>Hook</b>은 다르게, 특정 상황에서 <b>무조건 자동으로</b> 실행되는 안전장치예요. 예를 들어 비밀번호 같은 민감한 정보를 실수로 코드에 넣으려는 시도를 사람이 미처 못 챙겨도 자동으로 막아줄 수 있어요.</div>
     <div class="prompt-box">
-      <span class="label">이 프롬프트를 복사해서 사용하세요 (내용은 자유롭게 바꿔도 좋아요)</span>
-      <span class="ptext" id="p5"></span>
+      <span class="label">이렇게 부탁해보세요</span>
+      <span class="ptext">비밀 키(.env 파일이나 API 키 같은 것)를 실수로 코드 파일에 쓰려고 하면 자동으로 막아주는 규칙(Hook)을 이 프로젝트에 만들어줘.</span>
       <button class="copy-btn" onclick="copyPrompt(this)">복사하기</button>
+    </div>
+    <div class="check-box">
+      <span class="clabel">✅ 확인해보세요</span>
+      <div class="check-item"><input type="checkbox"><span>Hook이 프로젝트 설정에 추가됐다고 AI가 답했나요?</span></div>
     </div>
   </section>
 
-  <div class="open-ai-row">
-    <a class="open-ai-btn" href="https://claude.ai" target="_blank" rel="noopener">AI 챗봇 열어서 바로 시작하기 ↗</a>
+  <section class="step reveal" id="s6">
+    <div class="step-head"><div class="step-num">6</div><h2>데이터베이스에 연결해서, 새로고침해도 안 사라지게</h2><span class="axis-badge">하네스 · 맥락 확장</span></div>
+    <div class="why"><b>왜 이렇게 할까요?</b> 지금까지 만든 사이트는 새로고침하면 처음 상태로 돌아가요. 실제 서비스들은 <b>Supabase</b> 같은 무료 데이터베이스에 내용을 저장해서, 어떤 기기로 접속해도 내가 넣은 내용이 그대로 남아있게 만들어요.</div>
+    <div class="prep-box" style="margin:14px 0;">
+      <h3>사람이 직접 할 일 — 3가지</h3>
+      <ul>
+        <li><b>supabase.com</b> 가입 → New Project로 무료 프로젝트 생성</li>
+        <li>Project URL과 anon(공개) key를 메모장에 복사해두기</li>
+        <li><b>service(비밀) key는 따로 복사하지 않기</b> — 이건 코드에 절대 넣으면 안 되는 마스터 키예요</li>
+      </ul>
+    </div>
+    <div class="preview-box" id="previewBox"></div>
+    <div class="prompt-box">
+      <span class="label">Claude Code에 Supabase를 MCP로 연결해달라고 부탁하세요</span>
+      <span class="ptext">Supabase를 MCP로 연결해줘. 내 Project URL과 anon key는 이거야 — [여기에 붙여넣기]. 연결되면 알려줘.</span>
+      <button class="copy-btn" onclick="copyPrompt(this)">복사하기</button>
+    </div>
+    <div class="prompt-box">
+      <span class="label">연결되면, 테이블을 만들고 데이터를 채워달라고 하세요</span>
+      <span class="ptext" id="dbPrompt"></span>
+      <button class="copy-btn" onclick="copyPrompt(this)">복사하기</button>
+    </div>
+    <div class="why" style="margin-top:14px;"><b>왜 MCP는 매번 승인을 물을까요?</b> 데이터베이스는 한 번 잘못 건드리면 되돌리기 어려워요. 그래서 Claude가 DB에 손대는 작업 전에는 매번 사람에게 확인을 받도록 되어 있어요 — 안전을 우선하는 연결 방식이에요.</div>
+    <div class="check-box">
+      <span class="clabel">✅ 확인해보세요</span>
+      <div class="check-item"><input type="checkbox"><span>사이트를 새로고침해도 데이터가 그대로 남아있나요?</span></div>
+    </div>
+  </section>
+
+  <!-- ===== STEP 7 : deploy via Vercel CLI (common to all subjects/types) ===== -->
+  <div class="deploy-section reveal" id="s7">
+    <div class="deploy-wrap">
+      <span class="eyebrow2">STEP 7 · 모두 함께</span>
+      <h2>Vercel CLI로, 진짜 인터넷 주소가 있는 사이트로</h2>
+      <p style="color:#C7CEDA; font-size:15px; margin-bottom:30px;">Netlify Drop처럼 파일을 드래그하는 방법도 있지만, 오늘은 <b style="color:#fff">진짜 개발자들이 쓰는 CLI 배포</b>를 해볼게요. Claude Code에게 그대로 맡기면 돼요.</p>
+
+      <div class="deploy-step">
+        <div class="deploy-num">💬</div>
+        <div class="dtxt"><b>Claude Code에게 배포를 맡기세요</b><span>아래 프롬프트 하나면 Vercel CLI 설치부터 로그인, 배포까지 다 알아서 진행해요.</span></div>
+      </div>
+      <div class="deploy-step">
+        <div class="deploy-num">🔑</div>
+        <div class="dtxt"><b>중간에 로그인 창이 뜨면</b><span>브라우저에서 이메일/구글 등으로 로그인 (처음이면 무료 가입). Claude가 권한을 물으면 안전한 요청은 Yes로 승인하세요.</span></div>
+      </div>
+      <div class="deploy-step">
+        <div class="deploy-num">⏳</div>
+        <div class="dtxt"><b>몇 분 정도 걸릴 수 있어요</b><span>Node와 Vercel CLI를 설치하는 시간이에요. 정상적인 과정이니 기다려주세요.</span></div>
+      </div>
+      <div class="deploy-step">
+        <div class="deploy-num">🔗</div>
+        <div class="dtxt"><b>URL을 받으면 완성</b><span>https://...vercel.app 형태의 주소가 나와요. 다른 기기로 열어서 사이트(+데이터)가 그대로 뜨면 성공!</span></div>
+      </div>
+
+      <div class="prompt-box" style="margin-top:10px;">
+        <span class="label">Claude Code · 입력</span>
+        <span class="ptext">이 사이트를 Vercel로 인터넷에 배포해줘. Vercel CLI가 없으면 네가 알아서 설치하고(전역에 한 번만), GitHub 없이 바로 배포해줘. 배포가 끝나면 접속 주소(URL)를 알려줘.</span>
+        <button class="copy-btn" onclick="copyPrompt(this)">복사하기</button>
+      </div>
+
+      <div class="prep-box" style="background:rgba(255,255,255,.06); margin-top:26px;">
+        <h3 style="color:var(--accent-light);">💡 CLI(Vercel)와 MCP(Supabase), 뭐가 다를까</h3>
+        <ul style="color:#D9E0EC;">
+          <li><b>CLI(Vercel)</b> — 한 번 로그인해두면 이후로는 자동. 배포는 통째로 끝나는 단순 작업이라 위험도가 낮아서 속도를 우선해요.</li>
+          <li><b>MCP(Supabase)</b> — 매 작업마다 승인. 데이터는 되돌리기 어려우니 보안을 우선해요.</li>
+        </ul>
+      </div>
+    </div>
   </div>
 
   <div class="pitfall">
     <b>⚠️ 잠깐, 이것만은 꼭 기억하세요.</b><br>
-    AI가 코드를 대신 짜준다고 해서, 여러분이 "이해 안 해도 되는 것"은 아니에요. AI가 만들어준 결과를 보면서 "왜 이렇게 됐지?"를 스스로 생각해보는 습관이 훨씬 더 큰 힘이 돼요. 오늘 배운 건 코드가 아니라, <b>AI와 함께 생각하고 확인하는 방법</b>이에요.
+    AI가 코드를 대신 짜준다고 해서, 여러분이 "이해 안 해도 되는 것"은 아니에요. AI가 만든 결과를 보면서 "왜 이렇게 됐지?"를 스스로 생각해보는 습관이 훨씬 더 큰 힘이 돼요. 오늘 배운 건 코드 그 자체가 아니라, <b>AI가 잘 일하는 환경을 설계하는 방법</b>이에요.
   </div>
 
-  <!-- ===== STEP 6 : deploy to real web (common to all subjects/types) ===== -->
-  <div class="deploy-section reveal" id="s6">
-    <div class="deploy-wrap">
-      <span class="eyebrow2">STEP 6 · 모두 함께</span>
-      <h2>완성한 파일을, 진짜 인터넷 주소가 있는 사이트로</h2>
-      <p style="color:#C7CEDA; font-size:15px; margin-bottom:30px;">지금까지 만든 건 내 컴퓨터에만 있는 HTML 파일이에요. 아래 방법을 따라 하면, 코드를 몰라도 <b style="color:#fff">전 세계 어디서나 접속 가능한 진짜 주소</b>를 가진 웹사이트로 바꿀 수 있어요. 과목이나 종류와 상관없이 똑같은 방법이 통해요.</p>
+  <!-- ===== STEP 8 : wrap-up (harness recap + Karpathy principles) ===== -->
+  <div class="adv-section reveal" id="s8">
+    <div class="adv-wrap">
+      <span class="eyebrow3">STEP 8 · 마무리</span>
+      <h2>오늘 한 일, 하네스 엔지니어링으로 정리하기</h2>
+      <p class="lead">AI에게 매번 새로 설명하는 대신 <b style="color:#fff">AI가 일하기 좋은 환경 자체를 만들어주는 것</b>을 하네스 엔지니어링이라고 불러요. 오늘 거친 7단계가 전부 이 틀 안에 있었어요.</p>
 
-      <div class="deploy-step">
-        <div class="deploy-num">🖱️</div>
-        <div class="dtxt"><b>Netlify Drop 페이지 열기</b><span>브라우저에서 app.netlify.com/drop 으로 들어가요. 회원가입 없이도 바로 쓸 수 있어요.</span></div>
-      </div>
-      <div class="deploy-step">
-        <div class="deploy-num">📂</div>
-        <div class="dtxt"><b>완성한 HTML 파일을 화면 위로 드래그</b><span>내 컴퓨터에 저장된 파일을 마우스로 끌어다가, 점선으로 표시된 영역 위에 놓기만 하면 돼요.</span></div>
-      </div>
-      <div class="deploy-step">
-        <div class="deploy-num">🔗</div>
-        <div class="dtxt"><b>몇 초 기다리면 주소가 생겨요</b><span>업로드가 끝나면 "https://이상한이름.netlify.app" 같은 실제 주소가 만들어져요. 이게 내 사이트의 진짜 인터넷 주소예요.</span></div>
-      </div>
-      <div class="deploy-step">
-        <div class="deploy-num">📣</div>
-        <div class="dtxt"><b>친구에게 공유하거나, 즐겨찾기 해두기</b><span>이 주소만 있으면 언제 어디서든, 어떤 기기로든 내가 만든 사이트에 접속할 수 있어요.</span></div>
+      <div class="adv-card">
+        <h3>🧩 오늘 밟은 하네스 6축</h3>
+        <table class="axis-table">
+          <tr><th>오늘 했던 단계</th><th>하네스의 축</th><th>의미</th></tr>
+          <tr><td>STEP1 개발 환경 켜기</td><td class="doneMark">구조 ✓</td><td>뭘 미리 깔아두는가</td></tr>
+          <tr><td>STEP2 CLAUDE.md 작성</td><td class="doneMark">맥락 ✓</td><td>AI가 뭘 알고 있어야 하는가</td></tr>
+          <tr><td>STEP3 Plan Mode로 설계</td><td class="doneMark">계획 ✓</td><td>뭘 할지 먼저 정하기</td></tr>
+          <tr><td>STEP4 실행하고 다듬기</td><td class="doneMark">실행·검증 ✓</td><td>어떻게 시키고, 어떻게 확인하는가</td></tr>
+          <tr><td>STEP5 Hook 안전장치</td><td class="doneMark">구조 심화 ✓</td><td>실수를 자동으로 막는 장치</td></tr>
+          <tr><td>STEP6 데이터베이스 연결</td><td class="doneMark">맥락 확장 ✓</td><td>데이터가 안 사라지게 저장</td></tr>
+          <tr><td>STEP7 Vercel 배포</td><td class="doneMark">개선 ✓</td><td>실제 세상에 내놓고 계속 다듬기</td></tr>
+        </table>
       </div>
 
-      <div class="open-ai-row" style="margin-top:20px;">
-        <a class="open-ai-btn" href="https://app.netlify.com/drop" target="_blank" rel="noopener" onclick="markStepDone(this)">Netlify Drop 열어서 바로 올려보기 ↗</a>
+      <div class="adv-card">
+        <h3>💡 AI와 일 잘하는 사람들의 4가지 습관</h3>
+        <p>AI 코딩을 오래 해본 사람들이 공통으로 강조하는 습관이에요. 오늘부터 조금씩 따라해보세요.</p>
+        <div class="karpathy-grid">
+          <div class="karpathy-item"><b>1. 먼저 확인하고 시작하기</b><span>애매하면 AI가 짐작하게 두지 말고, 먼저 물어보게 만들기</span></div>
+          <div class="karpathy-item"><b>2. 최대한 단순하게</b><span>부탁 안 한 기능까지 알아서 넣지 않게, 필요한 것만 딱</span></div>
+          <div class="karpathy-item"><b>3. 건드린 곳만 수정</b><span>내가 부탁한 부분만 고치고, 나머지 코드는 그대로 두기</span></div>
+          <div class="karpathy-item"><b>4. 목표를 명확하게</b><span>"고쳐줘"보다 "이 조건을 만족하면 성공이야"라고 구체적으로</span></div>
+        </div>
       </div>
 
-      <div class="prep-box" style="background:rgba(255,255,255,.06); margin-top:26px;">
-        <h3 style="color:var(--accent-light);">💡 더 해보고 싶다면</h3>
-        <ul style="color:#D9E0EC;">
-          <li>GitHub Pages — 코드를 버전별로 관리하면서 배포하고 싶을 때 (조금 더 개발자스러운 방법)</li>
-          <li>내용을 업데이트하고 싶으면, 같은 파일을 다시 Netlify Drop에 올리면 주소는 그대로 유지돼요</li>
-        </ul>
+      <div class="adv-card">
+        <span class="tag-optional">다음 도전 과제</span>
+        <h3>🚀 이번 주에 더 해볼 것</h3>
+        <div id="ideaChips"></div>
+        <p style="margin-top:14px;">오늘 만든 CLAUDE.md를 일주일간 써보면서, AI가 자주 틀리는 부분을 한 줄씩 규칙으로 추가해보세요. 규칙이 3번 이상 반복되면 Rule로, 작업을 3번 이상 반복하면 Skill로 분리하는 게 다음 단계예요.</p>
       </div>
     </div>
   </div>
@@ -471,32 +600,36 @@ const SUBJECTS = {
 const TYPES = {
   flashcard:{ name:'암기카드', icon:'🗂️', tagline:'개념을 카드로 넘기며 외우는 사이트',
     buildGoal:'암기카드(플래시카드) 웹사이트',
-    p1Suffix:'카드를 클릭하면 앞면(질문)에서 뒷면(답)으로 뒤집히는 방식이면 좋겠어.',
+    coreBehavior:'카드를 클릭하면 앞면(질문)에서 뒷면(답)으로 뒤집히는 방식이면 좋겠어.',
     p2:'카드를 클릭했을 때 뒤집히는 애니메이션이 없이 그냥 텍스트만 바뀌어서 아쉬워. 부드럽게 회전하면서 뒤집히는 느낌으로 만들어줄 수 있어?',
     f1:'카드 순서를 무작위로 섞어주는 "섞기" 버튼을 추가해줘.',
     f2:'지금까지 몇 개의 카드를 확인했는지 화면에 "3/10" 처럼 표시해줘.',
-    checkItem2:'카드를 클릭하면 실제로 뒤집히나요?' },
+    checkItem2:'카드를 클릭하면 실제로 뒤집히나요?',
+    dbTable:'cards', dbColumns:'front(질문), back(답)' },
   quiz:{ name:'문제풀이', icon:'📝', tagline:'문제를 풀고 바로 채점받는 사이트',
     buildGoal:'객관식 문제풀이 웹사이트',
-    p1Suffix:'문제를 보여주고 보기 중 하나를 고르면 정답인지 바로 알려주는 방식이면 좋겠어.',
+    coreBehavior:'문제를 보여주고 보기 중 하나를 고르면 정답인지 바로 알려주는 방식이면 좋겠어.',
     p2:'정답을 골랐을 때 그냥 "정답" 또는 "오답"만 나와서 아쉬워. 왜 그 답이 맞는지 짧은 설명도 같이 보여주도록 고쳐줄 수 있어?',
     f1:'맞은 문제와 틀린 문제 개수를 화면 위에 표시해줘.',
     f2:'문제 순서를 무작위로 섞어주는 기능을 추가해줘.',
-    checkItem2:'보기를 클릭하면 정답인지 바로 알려주나요?' },
+    checkItem2:'보기를 클릭하면 정답인지 바로 알려주나요?',
+    dbTable:'questions', dbColumns:'question(문제), choices(보기), answer(정답), explain(해설)' },
   wrongnote:{ name:'오답노트', icon:'📓', tagline:'틀린 문제를 모아서 다시 정리하는 사이트',
     buildGoal:'오답노트 웹사이트',
-    p1Suffix:'문제, 내가 쓴 오답, 정답과 풀이를 각각 적어서 카드 형태로 모아두는 방식이면 좋겠어.',
+    coreBehavior:'문제, 내가 쓴 오답, 정답과 풀이를 각각 적어서 카드 형태로 모아두는 방식이면 좋겠어.',
     p2:'카드가 전부 한 줄로만 나와서 내용이 잘 안 보여. 문제/오답/정답/풀이를 구역별로 나눠서 좀 더 보기 편하게 만들어줄 수 있어?',
     f1:'"다시 풀어볼 문제"만 따로 모아 보여주는 필터 버튼을 추가해줘.',
     f2:'새 문제를 추가할 수 있는 입력 폼을 화면에 넣어줘.',
-    checkItem2:'문제와 오답, 정답이 각각 구분되어 보이나요?' },
+    checkItem2:'문제와 오답, 정답이 각각 구분되어 보이나요?',
+    dbTable:'wrong_notes', dbColumns:'question(문제), my_answer(내가 쓴 답), answer(정답), explain(풀이)' },
   planner:{ name:'공부계획+타이머', icon:'⏱️', tagline:'오늘 할 일과 집중 시간을 관리하는 사이트',
     buildGoal:'공부 계획 및 타이머 웹사이트',
-    p1Suffix:'오늘 할 일을 적으면 목록에 뜨고, 버튼을 누르면 25분 집중 타이머가 시작되는 방식이면 좋겠어.',
+    coreBehavior:'오늘 할 일을 적으면 목록에 뜨고, 버튼을 누르면 25분 집중 타이머가 시작되는 방식이면 좋겠어.',
     p2:'타이머가 끝나도 아무 표시가 없어서 몰랐어. 시간이 다 되면 화면 색이 바뀌거나 알림음이 나도록 고쳐줄 수 있어?',
     f1:'완료한 할 일에 체크 표시가 되고, 취소선이 그어지게 해줘.',
     f2:'오늘 몇 개의 할 일을 끝냈는지 화면 위에 표시해줘.',
-    checkItem2:'할 일을 적으면 목록에 실제로 추가되나요?' }
+    checkItem2:'할 일을 적으면 목록에 실제로 추가되나요?',
+    dbTable:'todos', dbColumns:'task(할 일), done(완료 여부)' }
 };
 
 const selectRevealIO = new IntersectionObserver((entries)=>{
@@ -540,14 +673,15 @@ function checkReady(){
 
 /* startGuide()
    과목+종류가 정해지면 호출됨. 테마 색상(CSS 변수 --accent)을 바꾸고,
-   SUBJECTS/TYPES 데이터를 조합해 배너·프롬프트·미리보기를 채운 뒤
+   SUBJECTS/TYPES 데이터를 조합해 배너·터미널 명령·프롬프트·DB 미리보기를 채운 뒤
    선택 화면을 숨기고 가이드 화면을 보여준다.
-   STEP5 미리보기(previewBox)는 pickedType 값에 따라 분기 처리된다 —
+   STEP6 데이터베이스 미리보기(previewBox)는 pickedType 값에 따라 분기 처리된다 —
    새 사이트 종류를 추가했다면 이 if/else if 체인에도 분기를 추가할 것. */
 function startGuide(){
   const name = document.getElementById('nameInput').value.trim();
   const s = SUBJECTS[pickedSubject];
   const t = TYPES[pickedType];
+  const folderName = pickedSubject + '-' + pickedType + '-site';
 
   document.documentElement.style.setProperty('--accent', s.accent);
   document.documentElement.style.setProperty('--accent-light', s.accentLight);
@@ -560,15 +694,27 @@ function startGuide(){
   document.getElementById('prepSubjectHint').textContent = '오늘 다룰 ' + s.name + ' ' + s.topicHint + ' 3~5개 정도 생각해오기';
   document.getElementById('checkItem2').textContent = t.checkItem2;
 
-  document.getElementById('p1').textContent =
-    '나는 중학생이고, 혼자 ' + s.name + ' 공부할 때 쓸 ' + t.buildGoal + '을 만들고 싶어. HTML 파일 하나로 만들어줘. ' + t.p1Suffix + ' 어려운 설명 없이, 완성된 파일만 보여줘.';
+  // STEP1 — 터미널 명령
+  document.getElementById('envCmd').textContent =
+    'npm install -g @anthropic-ai/claude-code\nmkdir ~/' + folderName + '\ncd ~/' + folderName + '\nclaude';
+
+  // STEP2 — CLAUDE.md 작성 프롬프트
+  document.getElementById('claudeMdPrompt').textContent =
+    '이 프로젝트 루트에 CLAUDE.md 파일을 만들어줘. 내용은: 이 프로젝트는 ' + s.name + ' 공부를 위한 ' + t.buildGoal + '다. ' + t.coreBehavior + ' 화면은 파스텔톤, 버튼은 크게. 전문 용어 없이 쉬운 말로 설명. 그 외 내용은 넣지 말고 짧게 유지해줘.';
+
+  // STEP3 — Plan Mode 프롬프트
+  document.getElementById('planPrompt').textContent =
+    'CLAUDE.md에 적힌 대로 ' + t.buildGoal + '을 만들고 싶어. 시작하기 전에 궁금한 점을 먼저 물어봐줘.';
+
+  // STEP4 — 피드백/기능 프롬프트
   document.getElementById('p2').textContent = t.p2;
   document.getElementById('p3a').textContent = t.f1;
   document.getElementById('p3b').textContent = t.f2;
 
+  // STEP6 — 데이터베이스 미리보기 + 프롬프트
   const previewBox = document.getElementById('previewBox');
   previewBox.innerHTML = '';
-  let p5text = '';
+  let dbRowsText = '';
 
   if(pickedType === 'flashcard'){
     s.cards.forEach(c=>{
@@ -577,8 +723,7 @@ function startGuide(){
       div.innerHTML = '<div class="front">' + c[0] + '</div><div class="back">' + c[1] + '</div>';
       previewBox.appendChild(div);
     });
-    const lines = s.cards.map(c => c[0] + ' - ' + c[1]).join('\n');
-    p5text = '지금 카드 내용을 아래 ' + s.name + ' 내용으로 바꿔줘.\n' + lines + '\n(원하는 내용을 더 추가해서 부탁해보세요)';
+    dbRowsText = s.cards.map(c => c[0] + ' - ' + c[1]).join('\n');
   } else if(pickedType === 'quiz'){
     const p = s.problem;
     const div = document.createElement('div');
@@ -586,14 +731,14 @@ function startGuide(){
     div.innerHTML = '<div class="q">' + p.q + '</div>' +
       p.choices.map(c => '<span class="choice' + (c===p.answer?' correct':'') + '">' + c + '</span>').join('');
     previewBox.appendChild(div);
-    p5text = '지금 문제를 아래 내용으로 바꿔줘.\n문제: ' + p.q + '\n보기: ' + p.choices.join(' / ') + '\n정답: ' + p.answer + '\n해설: ' + p.explain + '\n(원하는 문제를 더 추가해서 부탁해보세요)';
+    dbRowsText = '문제: ' + p.q + ' / 보기: ' + p.choices.join(', ') + ' / 정답: ' + p.answer + ' / 해설: ' + p.explain;
   } else if(pickedType === 'wrongnote'){
     const p = s.problem;
     const div = document.createElement('div');
     div.className = 'mini-card mini-note';
     div.innerHTML = '<div class="row"><b>문제</b> ' + p.q + '</div><div class="row"><b>내가 쓴 답</b> (틀렸던 답)</div><div class="row"><b>정답</b> ' + p.answer + '</div><div class="row"><b>풀이</b> ' + p.explain + '</div>';
     previewBox.appendChild(div);
-    p5text = '오답노트에 아래 내용을 추가해줘.\n문제: ' + p.q + '\n내가 쓴 답: (틀렸던 답을 적어보세요)\n정답: ' + p.answer + '\n풀이: ' + p.explain + '\n(원하는 문제를 더 추가해서 부탁해보세요)';
+    dbRowsText = '문제: ' + p.q + ' / 내가 쓴 답: (틀렸던 답) / 정답: ' + p.answer + ' / 풀이: ' + p.explain;
   } else if(pickedType === 'planner'){
     s.tasks.forEach(task=>{
       const div = document.createElement('div');
@@ -601,10 +746,11 @@ function startGuide(){
       div.innerHTML = '<span>☐</span><span>' + task + '</span>';
       previewBox.appendChild(div);
     });
-    const lines = s.tasks.map(x => '- ' + x).join('\n');
-    p5text = '오늘 할 일 목록을 아래로 채워줘.\n' + lines + '\n(원하는 할 일을 더 추가해서 부탁해보세요)';
+    dbRowsText = s.tasks.map(x => x + ' - 완료: 아니오').join('\n');
   }
-  document.getElementById('p5').textContent = p5text;
+
+  document.getElementById('dbPrompt').textContent =
+    'Supabase에 "' + t.dbTable + '" 테이블을 만들어줘. 컬럼은 ' + t.dbColumns + '. 그리고 아래 데이터를 넣어줘.\n' + dbRowsText + '\n사이트가 이 테이블에서 데이터를 읽어와 보여주도록 연결해줘. 데이터는 누구나 읽을 수 있게(공개 읽기) 설정해줘.';
 
   const ideaEl = document.getElementById('ideaChips');
   ideaEl.innerHTML = '';
@@ -629,7 +775,7 @@ function initGuideScrollFx(){
   guideFxReady = true;
 
   const dots = document.querySelectorAll('.guide-dot');
-  const guideSections = ['s1','s2','s3','s4','s5','s6'].map(id => document.getElementById(id));
+  const guideSections = ['s1','s2','s3','s4','s5','s6','s7','s8'].map(id => document.getElementById(id));
   const spyIO = new IntersectionObserver((entries)=>{
     entries.forEach(e=>{
       if(e.isIntersecting){
@@ -655,9 +801,9 @@ function initGuideScrollFx(){
 }
 
 function markStepDone(btn){
-  const section = btn.closest('section.step, .deploy-section');
+  const section = btn.closest('section.step, .deploy-section, .adv-section');
   if(!section) return;
-  const idx = ['s1','s2','s3','s4','s5','s6'].indexOf(section.id);
+  const idx = ['s1','s2','s3','s4','s5','s6','s7','s8'].indexOf(section.id);
   if(idx === -1) return;
   const dot = document.querySelectorAll('.guide-dot')[idx];
   if(dot) dot.classList.add('done');

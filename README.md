@@ -8,7 +8,7 @@
 |---|---|---|
 | `OT_바이브코딩.pptx` | 오프라인 오리엔테이션용 발표 슬라이드 (7장) | PowerPoint |
 | `mentoring_site.html` | "규칙이 왜 중요한지" 개념을 체험하는 데모 사이트 (STEP1~3) | 순수 HTML/CSS/JS |
-| `study_site_full_guide.html` | 이름·과목·사이트종류를 고르면 실제 제작 프롬프트를 안내하는 실습 가이드 (STEP1~6) | 순수 HTML/CSS/JS |
+| `study_site_full_guide.html` | 이름·과목·사이트종류를 고르면 터미널/Claude Code 기반의 실제 제작 프롬프트를 안내하는 실습 가이드 (STEP1~8) | 순수 HTML/CSS/JS |
 
 **둘 다 외부 라이브러리/빌드 과정이 필요 없습니다.** 파일을 더블클릭해서 브라우저로 열면 바로 실행되고, 코드를 수정한 뒤에도 저장하고 새로고침만 하면 바로 반영돼요.
 
@@ -16,30 +16,43 @@
 
 1. `OT_바이브코딩.pptx`로 오프닝
 2. `mentoring_site.html`에서 개념 체험 (규칙 실험실 → 비교 체험 → 나만의 규칙)
-3. `study_site_full_guide.html`에서 실제 제작 (이름/과목/종류 선택 → STEP1~5 프롬프트 실습 → STEP6 배포)
+3. `study_site_full_guide.html`에서 실제 제작 — 터미널에서 Claude Code를 켜는 것부터 CLAUDE.md 작성, Plan Mode, Hook, Supabase 연결, Vercel 배포까지 8단계
 
-## `study_site_full_guide.html` 구조 (수정 이어받을 사람은 여기부터 읽으세요)
+## `study_site_full_guide.html` 진행 단계 (STEP1~8)
+
+| STEP | 내용 | 하네스 축 |
+|---|---|---|
+| 1 | 터미널에서 Claude Code 설치 → 프로젝트 폴더 생성 → 실행 | 구조 |
+| 2 | CLAUDE.md 파일 작성 (전역 vs 프로젝트 규칙 구조) | 맥락 |
+| 3 | Plan Mode(`/plan`)로 먼저 설계 — AI가 질문하고, 승인 후 실행 | 계획 |
+| 4 | 결과 확인 + 구체적 피드백 + 기능 단계적 추가 | 실행·검증 |
+| 5 | Hook으로 안전장치 만들기 (비밀키 노출 자동 차단) | 구조 심화 |
+| 6 | Supabase를 MCP로 연결해 실제 테이블·데이터 생성 | 맥락 확장 |
+| 7 | Vercel CLI로 실제 배포 | 개선 |
+| 8 | 하네스 6축 총정리 + 카파시 4원칙 + 다음 과제 | 마무리 |
+
+과목(물리/화학/생명과학/지구과학/정보) × 사이트 종류(암기카드/문제풀이/오답노트/공부계획+타이머) 조합에 따라 CLAUDE.md 내용, Plan Mode 프롬프트, Supabase 테이블/데이터가 전부 자동으로 채워집니다.
 
 파일 안에 크게 두 화면이 있어요.
 
 - `#selectScreen` — 이름 입력 + 과목(물리/화학/생명과학/지구과학/정보) + 사이트 종류(암기카드/문제풀이/오답노트/공부계획+타이머) 선택
-- `#guideScreen` — 선택한 조합에 맞춰 STEP1~6이 채워지는 화면
+- `#guideScreen` — 선택한 조합에 맞춰 STEP1~8이 채워지는 화면
 
 콘텐츠는 JS의 두 데이터 객체가 전부 관리합니다. 코드 안에 상세 주석을 달아뒀어요.
 
 ```js
-const SUBJECTS = { physics: {...}, chemistry: {...}, ... }  // 과목별 콘텐츠
-const TYPES    = { flashcard: {...}, quiz: {...}, ... }     // 사이트 종류별 프롬프트
+const SUBJECTS = { physics: {...}, chemistry: {...}, ... }  // 과목별 콘텐츠 (카드/문제/할일/아이디어)
+const TYPES    = { flashcard: {...}, quiz: {...}, ... }     // 사이트 종류별 프롬프트 + DB 테이블 정의
 ```
 
 **새 과목을 추가하고 싶다면** → `SUBJECTS`에 항목 추가 + `<div class="subject-grid">`에 카드 하나 추가
-**새 사이트 종류를 추가하고 싶다면** → `TYPES`에 항목 추가 + `startGuide()` 안의 분기(`if(pickedType === ...)`)에 미리보기 로직 추가 + `<div class="type-grid">`에 카드 하나 추가
+**새 사이트 종류를 추가하고 싶다면** → `TYPES`에 항목 추가(`dbTable`/`dbColumns` 포함) + `startGuide()` 안의 STEP6 분기(`if(pickedType === ...)`)에 미리보기·DB 프롬프트 로직 추가 + `<div class="type-grid">`에 카드 하나 추가
 
 디자인 토큰(색상 등)은 파일 상단 `:root` CSS 변수에 모여 있어요. 과목을 고르면 `--accent`/`--accent-light`가 JS로 바뀌면서 테마 색이 바뀌는 구조입니다.
 
-## 배포 (STEP6에서 학생들에게 안내하는 방법)
+## 배포 (STEP7에서 학생들이 실제로 하는 것)
 
-완성한 HTML 파일을 [Netlify Drop](https://app.netlify.com/drop)에 드래그하면 회원가입 없이 즉시 실제 URL이 생성됩니다. 이 저장소의 파일을 실제로 배포하고 싶다면 팀 차원에서는 GitHub Pages를 쓰는 것도 방법이에요 (아래 참고).
+Claude Code에게 "Vercel로 배포해줘"라고 부탁하면 CLI 설치부터 로그인, 배포까지 알아서 진행해서 실제 `.vercel.app` 주소가 생성됩니다. 별도 프로그램 설치나 회원가입 절차를 미리 준비해두면 좋아요.
 
 ## 함께 작업하기 (Git)
 
