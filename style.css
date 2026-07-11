@@ -775,6 +775,20 @@ footer{ border-top:1px solid var(--line); padding:32px 24px; color:var(--fg-subt
   font-family:'Space Mono',monospace;
   color:var(--fg-muted);
 }
+.harness-axis-diagram > svg text:nth-of-type(2),
+.harness-axis-diagram > svg text:nth-of-type(3) { transform:translateY(26px); }
+.harness-axis-diagram > svg text:nth-of-type(4),
+.harness-axis-diagram > svg text:nth-of-type(5) { transform:translateY(20px); }
+.harness-axis-diagram > svg text:nth-of-type(6),
+.harness-axis-diagram > svg text:nth-of-type(7),
+.harness-axis-diagram > svg text:nth-of-type(14),
+.harness-axis-diagram > svg text:nth-of-type(15) { transform:translateY(27px); }
+.harness-axis-diagram > svg text:nth-of-type(8),
+.harness-axis-diagram > svg text:nth-of-type(9),
+.harness-axis-diagram > svg text:nth-of-type(12),
+.harness-axis-diagram > svg text:nth-of-type(13) { transform:translateY(29px); }
+.harness-axis-diagram > svg text:nth-of-type(10),
+.harness-axis-diagram > svg text:nth-of-type(11) { transform:translateY(38px); }
 .harness-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:24px; align-items:stretch; }
 @media(max-width:760px){ .harness-grid { grid-template-columns:1fr 1fr; } }
 @media(max-width:480px){ .harness-grid { grid-template-columns:1fr; } }
