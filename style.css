@@ -716,15 +716,74 @@ footer{ border-top:1px solid var(--line); padding:32px 24px; color:var(--fg-subt
 .cb-icon { font-size:22px; flex:none; }
 
 /* 하네스 그리드 */
-.harness-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:24px; }
+.mobile-flow { display:none; }
+.mf-card,
+.axis-chip,
+.axis-center {
+  border:1px solid var(--line);
+  background:var(--bg-alt);
+  padding:14px 16px;
+  min-width:0;
+}
+.mf-card {
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  text-align:center;
+}
+.mf-card b,
+.axis-chip b,
+.axis-center {
+  font-size:14px;
+  color:var(--fg);
+}
+.mf-card small,
+.axis-chip small {
+  font-family:'Space Mono',monospace;
+  font-size:10px;
+  color:var(--fg-muted);
+  text-transform:uppercase;
+  letter-spacing:.03em;
+}
+.mf-kicker {
+  font-family:'Space Mono',monospace;
+  font-size:9px;
+  color:var(--fg-muted);
+  text-transform:uppercase;
+  letter-spacing:.06em;
+}
+.mf-muted { background:rgba(26,26,26,0.04); }
+.mf-strong { background:var(--bg-card); border-color:var(--line-strong); }
+.mf-dark {
+  background:var(--fg);
+  color:var(--bg);
+  border-color:var(--fg);
+}
+.mf-dark b,
+.mf-dark small,
+.mf-dark .mf-kicker { color:var(--bg); }
+.mf-bad {
+  color:#b53a3a;
+  font-size:12px;
+  font-weight:700;
+}
+.mf-vs,
+.mf-arrow {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:'Space Mono',monospace;
+  color:var(--fg-muted);
+}
+.harness-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:24px; align-items:stretch; }
 @media(max-width:760px){ .harness-grid { grid-template-columns:1fr 1fr; } }
 @media(max-width:480px){ .harness-grid { grid-template-columns:1fr; } }
-.h-card { border:1px solid var(--line); padding:18px; background:var(--bg-alt); }
+.h-card { border:1px solid var(--line); padding:18px; background:var(--bg-alt); display:flex; flex-direction:column; min-height:100%; }
 .h-num { font-family:'Space Mono',monospace; font-size:24px; font-weight:700; color:var(--fg); margin-bottom:4px; }
 .h-axis { font-family:'Space Mono',monospace; font-size:10px; text-transform:uppercase; letter-spacing:.05em; color:var(--fg-muted); margin-bottom:8px; }
 .h-title { font-size:14px; font-weight:700; color:var(--fg); margin-bottom:8px; }
 .h-desc { font-size:13px; color:var(--fg-muted); line-height:1.7; margin-bottom:8px; }
-.h-example { font-family:'Space Mono',monospace; font-size:10px; color:var(--fg-muted); border-top:1px solid var(--line); padding-top:8px; text-transform:uppercase; letter-spacing:.03em; }
+.h-example { font-family:'Space Mono',monospace; font-size:10px; color:var(--fg-muted); border-top:1px solid var(--line); padding-top:8px; text-transform:uppercase; letter-spacing:.03em; margin-top:auto; }
 .harness-cycle { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:6px; margin-top:24px; padding:16px; background:var(--fg); color:var(--bg); font-family:'Space Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:.05em; }
 .hc-arrow { opacity:.5; }
 .hc-highlight { background:var(--bg); color:var(--fg); padding:4px 10px; }
@@ -1299,6 +1358,35 @@ img, svg, canvas, iframe { max-width:100%; }
   .w-prev,
   .w-next,
   .a-nav-btn{ min-width:0; }
+  .vibe-flow-diagram > svg,
+  .level-flow-diagram > svg,
+  .harness-axis-diagram > svg { display:none; }
+  .mobile-flow { display:grid; gap:10px; }
+  .mobile-vibe-flow,
+  .mobile-level-flow { grid-template-columns:1fr; }
+  .mobile-axis-flow {
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    align-items:stretch;
+  }
+  .axis-center {
+    grid-column:1 / -1;
+    background:var(--fg);
+    color:var(--bg);
+    text-align:center;
+    font-family:'Space Mono',monospace;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+  }
+  .axis-chip {
+    display:flex;
+    flex-direction:column;
+    gap:3px;
+    text-align:center;
+    justify-content:center;
+    min-height:74px;
+  }
+  .harness-grid { gap:12px; }
+  .h-card { padding:16px; }
   #aBottomNav{ padding:8px 12px; }
   .a-nav-btn{ padding:8px 12px; }
   #mentorBadge{ top:auto; right:auto; bottom:12px; left:12px; }
@@ -1307,7 +1395,8 @@ img, svg, canvas, iframe { max-width:100%; }
 @media(max-width:380px){
   .main-tab{ font-size:8.5px; padding-left:2px; padding-right:2px; }
   .subject-grid,
-  .type-grid{ grid-template-columns:1fr; }
+  .type-grid,
+  .mobile-axis-flow{ grid-template-columns:1fr; }
   .hero h1,
   .select-hero h1,
   .a-page:not(.hero) > h2:first-of-type{ font-size:28px; }
