@@ -577,6 +577,9 @@ async function bootHero3D(){
   }
   function fit(){
     const w=container.clientWidth||1, h=container.clientHeight||1;
+    if(w >= 900) world.position.set(3.4, 0, -2.0);
+    else if(w >= 640) world.position.set(2.4, 0, -1.4);
+    else world.position.set(0.6, 0, -0.4);
     camera.aspect=w/h; camera.updateProjectionMatrix(); renderer.setSize(w,h);
   }
   new ResizeObserver(fit).observe(container); fit(); animate();
