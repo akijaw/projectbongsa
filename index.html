@@ -1064,7 +1064,9 @@
     <div class="prep-box">
       <h3>🎒 시작 전 준비물</h3>
       <ul>
-        <li>터미널을 쓸 수 있는 노트북 (Mac 또는 Windows), Node.js 설치</li>
+        <li>Windows 10 버전 1809 이상 노트북</li>
+        <li>Windows PowerShell 또는 Windows Terminal (Windows에 기본 설치)</li>
+        <li>Git for Windows — 선택사항, 없어도 PowerShell로 진행 가능</li>
         <li>Claude Code (터미널에서 쓰는 AI 코딩 도구) — 없으면 STEP1에서 같이 설치한다</li>
         <li id="prepSubjectHint"></li>
         <li>궁금한 건 참지 말고 바로 멘토에게 질문하기</li>
@@ -1079,8 +1081,9 @@
       <div class="step-head"><div class="step-num">1</div><h2>개발 환경 켜기</h2><span class="axis-badge">하네스 · 구조</span></div>
       <div class="connect-banner"><span class="cb-recall">1차시 연결</span><span class="cb-sep">|</span><span class="cb-msg">AI가 잘 일하려면 도구부터 준비해야 한다 — 하네스 6축 중 <b>구조</b> 축 실전이다</span><span class="cb-lv lv-tag-3">레벨 3 · 하네스</span></div>
       <div class="why"><b>왜 이렇게 할까요?</b> 실제 개발자들은 채팅창이 아니라 <b>터미널</b>에서 AI 코딩 도구를 켜고 작업한다. 오늘은 Claude Code를 터미널에서 실행하고, <b>Superpowers 플러그인</b>까지 설치해서 AI가 계획을 더 잘 세울 수 있게 준비한다.</div>
+      <div class="why" style="margin-top:0;"><b>Windows에서 PowerShell 열기:</b> <kbd>Win + X</kbd>를 누른 뒤 <b>터미널</b> 또는 <b>Windows PowerShell</b>을 선택한다. 명령줄 앞에 <code>PS C:\Users\사용자이름&gt;</code>이 보이면 준비 완료!</div>
       <div class="prompt-box">
-        <span class="label">① Claude Code 설치 + 프로젝트 폴더 만들기</span>
+        <span class="label">① PowerShell에서 Claude Code 설치 + 프로젝트 폴더 만들기</span>
         <span class="ptext" id="envCmd"></span>
         <button class="copy-btn" onclick="copyPrompt(this)">복사하기</button>
       </div>
@@ -1110,8 +1113,8 @@
 
       <div class="why"><b>왜 직접 쓸까요?</b> AI가 나를 대신해서 써주면 내 프로젝트의 진짜 의도가 빠질 수 있다. 내가 직접 써야 AI가 내 생각대로 움직인다. 아래 틀을 참고해서 <b>빈 칸을 채워</b> 완성하자.</div>
 
-      <div class="adv-code">~/.claude/CLAUDE.md   ← 전역 규칙 (모든 프로젝트 공통)
-./CLAUDE.md            ← 이 프로젝트 전용 규칙 ← 지금 만들 것</div>
+      <div class="adv-code">C:\Users\사용자이름\.claude\CLAUDE.md   ← 전역 규칙 (모든 프로젝트 공통)
+.\CLAUDE.md                              ← 이 프로젝트 전용 규칙 ← 지금 만들 것</div>
 
       <div class="claudemd-template">
         <div class="cmt-header">📋 CLAUDE.md 작성 틀 — 빈 칸을 채워보자</div>
@@ -1215,12 +1218,7 @@
       <div class="connect-banner"><span class="cb-recall">1차시 연결</span><span class="cb-sep">|</span><span class="cb-msg">1차시에서 배운 <b>구체적 프롬프트</b>가 실전이다 — "이상하다" 대신 정확하게 설명하는 것이 레벨 1의 핵심이다</span><span class="cb-lv lv-tag-1">레벨 1 · 프롬프트</span></div>
       <div class="why"><b>왜 이렇게 할까요?</b> 처음부터 완벽하게 나오는 경우는 드물다. 결과를 직접 열어서 확인하고, "이상하다" 대신 <b>무엇이 어떻게 이상한지 구체적으로</b> 설명해서 고쳐나가는 게 핵심이다. 디자이너에게 피드백 주듯이 대화하면 된다.</div>
       <div class="prompt-box">
-        <span class="label">① 만들어진 사이트 열어보기 — Mac</span>
-        <span class="ptext">open index.html</span>
-        <button class="copy-btn" onclick="copyPrompt(this)">복사하기</button>
-      </div>
-      <div class="prompt-box">
-        <span class="label">① 만들어진 사이트 열어보기 — Windows</span>
+        <span class="label">① 만들어진 사이트 열어보기 — Windows PowerShell</span>
         <span class="ptext">start index.html</span>
         <button class="copy-btn" onclick="copyPrompt(this)">복사하기</button>
       </div>
@@ -1260,7 +1258,7 @@
       <div class="why" style="margin-top:0;"><b>왜 비밀 키가 위험할까요?</b> API 키나 .env 파일의 비밀 키가 실수로 코드에 적히면, GitHub에 올렸을 때 전 세계가 볼 수 있다. Hook은 파일을 저장하기 전에 이걸 자동으로 차단해줘요. 훅은 전역 설정에 등록하면 모든 프로젝트에 자동으로 적용된다!</div>
       <div class="prompt-box">
         <span class="label">이렇게 부탁하자 — 전역 설정에 등록하는 게 포인트</span>
-        <span class="ptext">비밀 키(.env 파일이나 service 키 같은 것)를 실수로 코드 파일에 쓰려고 하면 자동으로 막아주는 규칙(훅)을 전역 설정(~/.claude/settings.json)에 만들어줘.</span>
+        <span class="ptext">비밀 키(.env 파일이나 service 키 같은 것)를 실수로 코드 파일에 쓰려고 하면 자동으로 막아주는 규칙(훅)을 Windows 전역 설정(C:\Users\사용자이름\.claude\settings.json)에 만들어줘.</span>
         <button class="copy-btn" onclick="copyPrompt(this)">복사하기</button>
       </div>
       <div class="check-box">

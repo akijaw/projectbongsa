@@ -382,7 +382,7 @@ function startGuide(){
   document.getElementById('gnIcon').textContent = s.icon;
 
   document.getElementById('envCmd').textContent =
-    'npm install -g @anthropic-ai/claude-code\nmkdir ~/'+folderName+'\ncd ~/'+folderName+'\nclaude';
+    'irm https://claude.ai/install.ps1 | iex\nmkdir "$HOME\\'+folderName+'"\ncd "$HOME\\'+folderName+'"\nclaude';
 
   // CLAUDE.md는 학생이 직접 작성 — 과목·타입 힌트만 빈칸에 표시
   document.getElementById('fill-subject').textContent = s.name;
