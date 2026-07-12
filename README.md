@@ -31,7 +31,7 @@
 
 | STEP | 내용 | 하네스 축 |
 |---|---|---|
-| 1 | Windows PowerShell에서 Claude Code 설치 → 프로젝트 폴더 생성 → 실행 | 구조 |
+| 1 | Git for Windows 확인 → PowerShell에서 Claude Code 설치 → 플러그인 연결 | 구조 |
 | 2 | CLAUDE.md 파일 작성 (전역 vs 프로젝트 규칙 구조) | 맥락 |
 | 3 | Plan Mode(`/plan`)로 먼저 설계 — AI가 질문하고, 승인 후 실행 | 계획 |
 | 4 | 결과 확인 + 구체적 피드백 + 기능 단계적 추가 | 실행·검증 |
