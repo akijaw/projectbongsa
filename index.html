@@ -1082,38 +1082,47 @@
       <div class="connect-banner"><span class="cb-recall">1차시 연결</span><span class="cb-sep">|</span><span class="cb-msg">AI가 잘 일하려면 도구부터 준비해야 한다 — 하네스 6축 중 <b>구조</b> 축 실전이다</span><span class="cb-lv lv-tag-3">레벨 3 · 하네스</span></div>
       <div class="why"><b>왜 이렇게 할까요?</b> 실제 개발자들은 채팅창이 아니라 <b>터미널</b>에서 AI 코딩 도구를 켜고 작업한다. 오늘은 Claude Code를 터미널에서 실행하고, <b>Superpowers 플러그인</b>까지 설치해서 AI가 계획을 더 잘 세울 수 있게 준비한다.</div>
       <div class="why" style="margin-top:0;"><b>Windows에서 PowerShell 열기:</b> <kbd>Win + X</kbd>를 누른 뒤 <b>터미널</b> 또는 <b>Windows PowerShell</b>을 선택한다. 명령줄 앞에 <code>PS C:\Users\사용자이름&gt;</code>이 보이면 준비 완료!</div>
+      <div class="why" style="margin-top:0;"><b>반드시 ①부터 ⑥까지 순서대로 진행한다.</b> 각 명령 상자 위에 적힌 실행 위치가 <b>PowerShell</b>인지 <b>Claude Code 안</b>인지 확인하고, 한 단계가 성공한 뒤 다음 단계로 넘어간다.</div>
       <div class="prompt-box">
-        <span class="label">① Git for Windows 설치하기 — 플러그인 연결 전에 필수</span>
-        <span class="ptext">winget install --id Git.Git -e --source winget</span>
+        <span class="label">① [PowerShell] Git for Windows 설치</span>
+        <span class="ptext">winget install --id Git.Git -e --source winget --accept-package-agreements --accept-source-agreements</span>
         <button class="copy-btn" onclick="copyPrompt(this)">복사하기</button>
       </div>
-      <div class="why" style="margin-top:0;"><b>중요:</b> Git 설치가 끝나면 <b>PowerShell과 Claude Code를 모두 닫고 새 PowerShell을 열어야</b> 새 경로가 적용된다. 새 창에서 <code>git --version</code>을 실행해 버전이 나오면 다음 단계로 간다.</div>
+      <div class="why" style="margin-top:0;"><b>② PowerShell 완전히 닫고 다시 열기:</b> Git 설치가 끝나면 지금 창을 닫는다. <kbd>Win + X</kbd> → <b>터미널</b> 또는 <b>Windows PowerShell</b>로 새 창을 연다. 이 과정을 건너뛰면 Git 경로 오류가 날 수 있다.</div>
       <div class="prompt-box">
-        <span class="label">② 새 PowerShell에서 Git 확인 + Claude Code 설치 + 프로젝트 폴더 만들기</span>
+        <span class="label">③ [새 PowerShell] Git 확인 + 안전한 Git Bash 경로 등록</span>
+        <span class="ptext">git --version
+$gitBash = 'C:\Program Files\Git\bin\bash.exe'
+if (!(Test-Path $gitBash)) { throw 'Git Bash를 찾을 수 없습니다. Git 설치 후 PowerShell을 다시 열어주세요.' }
+$env:CLAUDE_CODE_GIT_BASH_PATH = $gitBash
+[Environment]::SetEnvironmentVariable('CLAUDE_CODE_GIT_BASH_PATH', $gitBash, 'User')</span>
+        <button class="copy-btn" onclick="copyPrompt(this)">복사하기</button>
+      </div>
+      <div class="prompt-box">
+        <span class="label">④ [같은 PowerShell] Claude Code 설치 + 프로젝트 폴더 생성 + 실행</span>
         <span class="ptext" id="envCmd"></span>
         <button class="copy-btn" onclick="copyPrompt(this)">복사하기</button>
       </div>
       <div class="prompt-box">
-        <span class="label">③ Claude가 켜지면, Superpowers 플러그인 설치하기</span>
+        <span class="label">⑤ [Claude Code 안] Superpowers Marketplace와 플러그인 설치</span>
         <span class="ptext">/plugin marketplace add obra/superpowers-marketplace
 /plugin install superpowers@superpowers-marketplace</span>
         <button class="copy-btn" onclick="copyPrompt(this)">복사하기</button>
       </div>
-      <div class="why" style="margin-top:0;"><b>“Command 'git' not found or is in an unsafe location” 오류가 뜬다면:</b> Claude Code를 <code>/exit</code>로 종료한 뒤 PowerShell에서 아래 명령을 실행한다. Git Bash의 안전한 설치 경로를 Claude Code에 직접 알려주는 복구 방법이다.</div>
       <div class="prompt-box">
-        <span class="label">Git 경로 오류 복구 — PowerShell에서 실행</span>
-        <span class="ptext">git --version
-Get-Command git | Select-Object Source
-[Environment]::SetEnvironmentVariable('CLAUDE_CODE_GIT_BASH_PATH', 'C:\Program Files\Git\bin\bash.exe', 'User')</span>
+        <span class="label">⑥ [Claude Code 안] 플러그인 다시 불러오기 + 설치 확인</span>
+        <span class="ptext">/reload-plugins
+/plugin</span>
         <button class="copy-btn" onclick="copyPrompt(this)">복사하기</button>
       </div>
-      <div class="why" style="margin-top:0;"><b>복구 후:</b> PowerShell을 다시 닫고 새로 연 다음 프로젝트 폴더로 이동해 <code>claude</code>를 실행하고, ③의 플러그인 명령을 다시 입력한다. <code>Get-Command git</code> 결과가 현재 프로젝트 폴더라면 그 폴더 안의 <code>git.exe</code> 또는 <code>git.cmd</code>를 사용하지 말고 제거한 뒤 다시 시도한다.</div>
-      <div class="why" style="margin-top:0;"><b>Superpowers 플러그인이란?</b> AI가 Plan Mode에서 설계를 훨씬 꼼꼼하게 할 수 있도록 도와주는 도구이다. 설치 후 /exit로 나갔다가 같은 폴더에서 claude를 다시 실행하면 플러그인이 적용된다. /superpowers 가 자동완성되면 성공!</div>
+      <div class="why" style="margin-top:0;"><b>성공 기준:</b> <code>/plugin</code> 화면의 Installed 목록에서 <b>superpowers@superpowers-marketplace</b>가 <b>enabled</b>로 보이면 설치 완료다. “Command 'git' not found or is in an unsafe location” 오류가 뜨면 Claude Code를 종료하고 ②부터 다시 진행한다.</div>
+      <div class="why" style="margin-top:0;"><b>Superpowers 플러그인이란?</b> AI가 Plan Mode에서 설계를 훨씬 꼼꼼하게 할 수 있도록 도와주는 도구이다. 설치 후 <code>/reload-plugins</code>로 다시 불러오면 바로 적용된다.</div>
       <div class="check-box">
         <span class="clabel">✅ 확인해보자</span>
         <div class="check-item"><input type="checkbox"><span>새 PowerShell에서 git --version을 실행했을 때 버전이 나오나?</span></div>
+        <div class="check-item"><input type="checkbox"><span>Git Bash 경로 등록 명령에서 빨간 오류가 나오지 않았나?</span></div>
         <div class="check-item"><input type="checkbox"><span>터미널에서 claude를 실행하면 AI가 응답하는 화면이 뜨나?</span></div>
-        <div class="check-item"><input type="checkbox"><span>/superpowers 를 입력했을 때 자동완성이 되나?</span></div>
+        <div class="check-item"><input type="checkbox"><span>/plugin의 Installed 목록에서 Superpowers 상태가 enabled로 나오나?</span></div>
       </div>
       <div class="wiz-nav">
         <button class="w-prev w-hide" onclick="wPrev()">← 이전</button>

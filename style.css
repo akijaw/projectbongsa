@@ -1366,6 +1366,14 @@ img, svg, canvas, iframe { max-width:100%; }
   .mentor-panel,
   .adv-card{ padding-left:18px; padding-right:18px; }
   .prompt-box{ grid-template-columns:1fr; }
+  .prompt-box::before{ height:58px; }
+  .prompt-box::after{ top:22px; }
+  .prompt-box .label{
+    left:70px; right:12px; top:0;
+    min-height:58px; line-height:1.35;
+    display:flex; align-items:center;
+    white-space:normal; overflow-wrap:anywhere;
+  }
   .prompt-box .copy-btn,
   .copy-btn{ width:100%; }
   .wiz-nav{ gap:10px; padding-left:16px; padding-right:16px; }
